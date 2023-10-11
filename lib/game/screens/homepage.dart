@@ -1,5 +1,5 @@
-import 'package:breakout_revival/gamepage.dart';
-import 'package:breakout_revival/settings.dart';
+import 'package:breakout_revival/game/screens/gamepage.dart';
+import 'package:breakout_revival/game/component/settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
