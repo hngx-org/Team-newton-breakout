@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:breakout_revival/game/component/bricks.dart';
 import 'package:breakout_revival/game/component/player.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +39,7 @@ class _GameScreenState extends State<GameScreen> {
   //Brick variables :-
   static double wallGap = 0.5 *
       (2 - numOfBricksPerRow * brickWidth - (numOfBricksPerRow - 1) * brickGap);
-  static int numOfBricksPerRow = 5;
+  static int numOfBricksPerRow = 4;
   static double firstBrickX = -1 + wallGap;
   static double firstBrickY = -0.9;
   static double brickWidth = 0.4;
@@ -281,28 +279,7 @@ class _GameScreenState extends State<GameScreen> {
     return false;
   }
 
-  double calculateCollisionAngle() {
-    // Calculate the angle of reflection based on collision point
-    // You can use trigonometry functions to determine this angle
-    // ...
-
-    // Calculate the difference between the collision point and the center of the player's bar.
-    double deltaX = collisionX - (playerX + playerWidth / 2);
-    double deltaY = collisionY -
-        playerY; // Assuming the player's bar is at the top of the screen.
-
-    // Calculate the collision angle using atan2.
-    double collisionAngle = atan2(deltaY, deltaX);
-
-    // Adjust the angle if necessary based on the ball's direction.
-    if (ballXdir == DIRECTION.left && collisionAngle < 0) {
-      collisionAngle +=
-          pi; // If the ball is moving left, adjust for reflection.
-    }
-
-    // Now, collisionAngle contains the angle of reflection.
-    // You can use it to set the ball's new direction.
-    adjustBallDirection(collisionAngle);
+  void updateBallDIRECTION() {
     setState(() {
       //Bouncing ball upwards once it hits player bar
       if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.88) {
@@ -327,27 +304,6 @@ class _GameScreenState extends State<GameScreen> {
         ballXdir = DIRECTION.left;
       }
     });
-
-    return calculatedAngle;
-  }
-
-  void updateBallDIRECTION() {
-    setState(() {
-      // Calculate the angle of reflection based on collision point
-      double collisionAngle = calculateCollisionAngle();
-
-      // Adjust the ball's direction based on the collision angle
-      adjustBallDirection(collisionAngle);
-    });
-  }
-
-  void adjustBallDirection(double collisionAngle) {
-    // Calculate new ball direction based on collision angle and player's speed
-    double newDirectionX = ballSpeed * cos(collisionAngle);
-    double newDirectionY = ballSpeed * sin(collisionAngle);
-
-    ballXdir = (newDirectionX > 0) ? DIRECTION.right : DIRECTION.left;
-    ballYdir = (newDirectionY > 0) ? DIRECTION.down : DIRECTION.up;
   }
 
   void moveBall() {
