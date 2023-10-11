@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:breakout_revival/bricks.dart';
-import 'package:breakout_revival/player.dart';
+import 'package:breakout_revival/game/component/bricks.dart';
+import 'package:breakout_revival/game/component/player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
