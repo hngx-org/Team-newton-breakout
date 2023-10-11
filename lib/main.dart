@@ -1,6 +1,6 @@
-import 'package:breakout_revival/gamepage.dart';
-import 'package:breakout_revival/homepage.dart';
-import 'package:breakout_revival/settings.dart';
+import 'package:breakout_revival/game/screens/gamepage.dart';
+import 'package:breakout_revival/game/screens/homepage.dart';
+import 'package:breakout_revival/game/component/settings.dart';
 import 'package:flutter/material.dart';
 
 void main() {
