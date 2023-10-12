@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:breakout_revival/game/component/bricks.dart';
 import 'package:breakout_revival/game/component/player.dart';
 import 'package:flutter/foundation.dart';
@@ -17,7 +16,7 @@ class GameScreen extends StatefulWidget {
 }
 
 enum DIRECTION {
-  uo,
+  up,
   down,
   left,
   right,
@@ -152,13 +151,13 @@ class _GameScreenState extends State<GameScreen> {
         //The ball must be moving constantly from the starting of the game till its over
         //Thus, every 10 milliseconds we move the ball and uodate its DIRECTION
         moveBall();
-        uodateBallDIRECTION();
+        updateBallDIRECTION();
 
         //We must also keep checking if the ball has hit any bricks
         checkForBrokenBricks();
         //If at any point of the game, the player dies, we must :
         //  1. stop the timer,
-        //  2. uodate the game state booleans
+        //  2. update the game state booleans
 
         if (isPlayerDead() || areAllBricksBroken()) {
           timer.cancel();
@@ -168,6 +167,34 @@ class _GameScreenState extends State<GameScreen> {
         }
       });
     });
+  }
+
+  void pauseGame() {
+    setState(() {
+      hasGameStarted = true;
+    });
+
+    // Timer.periodic(const Duration(milliseconds: 10), (timer) {
+    //   setState(() {
+    //     //The ball must be moving constantly from the starting of the game till its over
+    //     //Thus, every 10 milliseconds we move the ball and uodate its DIRECTION
+    //     moveBall();
+    //     updateBallDIRECTION();
+
+    //     //We must also keep checking if the ball has hit any bricks
+    //     checkForBrokenBricks();
+    //     //If at any point of the game, the player dies, we must :
+    //     //  1. stop the timer,
+    //     //  2. update the game state booleans
+
+    //     if (isPlayerDead() || areAllBricksBroken()) {
+    //       timer.cancel();
+    //       setState(() {
+    //         hasGameEnded = true;
+    //       });
+    //     }
+    //   });
+    // });
   }
 
   void checkForBrokenBricks() {
@@ -181,7 +208,7 @@ class _GameScreenState extends State<GameScreen> {
         setState(() {
           brickList[i][2] = true;
           brokenBrickCounter++;
-          //uodate ball's DIRECTION
+          //update ball's DIRECTION
           //Now to do this, we must determine which side of the brick has been hit
           // as that influences the DIRECTION in which the ball has to be reflected
 
@@ -202,7 +229,7 @@ class _GameScreenState extends State<GameScreen> {
               ballXdir = DIRECTION.right;
               break;
             case 't':
-              ballYdir = DIRECTION.uo;
+              ballYdir = DIRECTION.up;
               break;
             case 'b':
               ballYdir = DIRECTION.down;
@@ -252,11 +279,11 @@ class _GameScreenState extends State<GameScreen> {
     return false;
   }
 
-  void uodateBallDIRECTION() {
+  void updateBallDIRECTION() {
     setState(() {
-      //Bouncing ball uowards once it hits player bar
+      //Bouncing ball upwards once it hits player bar
       if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.88) {
-        ballYdir = DIRECTION.uo;
+        ballYdir = DIRECTION.up;
         //If the ball hits the exact edges of the player bar, we show an angle in its reflection
         if (ballX == playerX) {
           ballXdir = DIRECTION.left;
@@ -284,7 +311,7 @@ class _GameScreenState extends State<GameScreen> {
       //Vertical Movement :
       if (ballYdir == DIRECTION.down) {
         ballY += ballSpeed;
-      } else if (ballYdir == DIRECTION.uo) {
+      } else if (ballYdir == DIRECTION.up) {
         ballY -= ballSpeed;
       }
 
@@ -317,6 +344,27 @@ class _GameScreenState extends State<GameScreen> {
         playerX += playerSpeed;
       });
     }
+  }
+
+  void onHorizontalDragUpdate(DragUpdateDetails details) {
+    double delta = details.delta.dx * playerSpeed * playerSpeed;
+
+    // Update the state of your container's position
+    setState(() {
+      // Add the delta multiplied by the player speed to the initial position
+      playerX += delta * playerSpeed;
+
+      // Check if the container is within the screen boundaries
+      if (playerX < -1) {
+        // If it is too far left, set it to -1
+        playerX = -1;
+      } else if (playerX + playerWidth > 1) {
+        // If it is too far right, set it to 1 - playerWidth
+        playerX = 1 - playerWidth;
+      }
+
+      // Assign the initial position to the playerX variable
+    });
   }
 
   void resetGame() {
@@ -356,7 +404,7 @@ class _GameScreenState extends State<GameScreen> {
           }
         },
         child: GestureDetector(
-          onTap: hasGameStarted ? null : startGame,
+          onTap: hasGameStarted ? pauseGame : startGame,
           child: Scaffold(
             backgroundColor: Colors.tealAccent,
             body: Center(
@@ -469,6 +517,7 @@ class _GameScreenState extends State<GameScreen> {
 
                   //PLAYER
                   MyPlayer(
+                    onHorizontalDragUpdate: onHorizontalDragUpdate,
                     playerX: playerX,
                     playerWidth: playerWidth,
                   ),
