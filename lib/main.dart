@@ -1,8 +1,10 @@
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:breakout_revival/component/settings.dart';
+import 'package:breakout_revival/screens/splash_screen/splash_screen.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,29 +17,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.route,
-      theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: Colors.tealAccent.shade700,
-        primaryColor: Colors.tealAccent.shade700,
-        cardColor: const Color(0xFFDFF3E8),
-        textTheme: TextTheme(
-            displayLarge: TextStyle(
-              color: Colors.tealAccent.shade100,
-              fontFamily: 'Press_Start_2P',
+    return ScreenUtilInit(
+        designSize: const Size(411.4, 868.6),
+        minTextAdapt: true,
+        builder: (context, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: SplashScreen.route,
+            theme: ThemeData.light().copyWith(
+              scaffoldBackgroundColor: const Color(0xFF6666FF),
+              primaryColor: const Color(0xFF3333AA),
+              cardColor: const Color(0xFFDFF3E8),
+              textTheme: const TextTheme(
+                  displayLarge: TextStyle(
+                    color: Color(0xFF000088),
+                    fontFamily: 'Press_Start_2P',
+                  ),
+                  displayMedium: TextStyle(
+                    fontFamily: 'Amaranth',
+                    color: Color(0xFFDFF3E8),
+                  )),
             ),
-            displayMedium: const TextStyle(
-              fontFamily: 'Amaranth',
-              color: Color(0xFFDFF3E8),
-            )),
-      ),
-      routes: {
-        HomeScreen.route: (context) => const HomeScreen(),
-        GameScreen.route: (context) => const GameScreen(),
-        SettingScreen.route: (context) => const SettingScreen(),
-      },
-    );
+            routes: {
+              SplashScreen.route: (context) => const SplashScreen(),
+              HomeScreen.route: (context) => const HomeScreen(),
+              GameScreen.route: (context) => const GameScreen(),
+              SettingScreen.route: (context) => const SettingScreen(),
+            },
+          );
+        });
   }
 }
 

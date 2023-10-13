@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const route = '/';
+  static const route = '/home-screen';
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final mediaQueryObject = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.teal,
+        backgroundColor: const Color(0xFF6666FF),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? 'B R I C K - B R E A K E R'
                     : 'B R I C K \n\nB R E A K E R',
                 style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                    color: const Color(0xFF000088),
                     fontSize: kIsWeb
                         ? mediaQueryObject.size.width * 0.035
                         : mediaQueryObject.size.height * 0.025),
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: const Color(0xFF000088),
                         padding: EdgeInsets.symmetric(
                           horizontal: mediaQueryObject.size.width * 0.02,
                           vertical: kIsWeb
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: const Color(0xFF000088),
                         padding: EdgeInsets.symmetric(
                           horizontal: mediaQueryObject.size.width * 0.02,
                           vertical: kIsWeb

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:breakout_revival/component/ball.dart';
 import 'package:breakout_revival/component/bricks.dart';
 import 'package:breakout_revival/component/player.dart';
 import 'package:flutter/foundation.dart';
@@ -434,93 +435,79 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaQueryObject = MediaQuery.of(context);
-    return SafeArea(
-      child: RawKeyboardListener(
-        focusNode: FocusNode(),
-        autofocus: true,
-        onKey: (event) {
-          if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-            movePlayerleft();
-          } else if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-            movePlayerright();
-          }
-        },
-        child: GestureDetector(
-          onTap: hasGameStarted ? pauseGame : startGame,
-          child: Scaffold(
-            backgroundColor: Colors.tealAccent,
-            body: Center(
-              child: Stack(
-                children: [
-                  //PLAYER INTERACTIVE SCREENS :
+    return WillPopScope(
+      onWillPop: () async {
+        if (hasGameEnded) {
+          return true;
+        }
+        return false;
+      },
+      child: SafeArea(
+        child: RawKeyboardListener(
+          focusNode: FocusNode(),
+          autofocus: true,
+          onKey: (event) {
+            if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+              movePlayerleft();
+            } else if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+              movePlayerright();
+            }
+          },
+          child: GestureDetector(
+            onTap: hasGameStarted ? pauseGame : startGame,
+            child: Scaffold(
+              backgroundColor: const Color(0xFF6666FF),
+              body: Center(
+                child: Stack(
+                  children: [
+                    //PLAYER INTERACTIVE SCREENS :
 
-                  //1. Tap to Begin :-
-                  Visibility(
-                    visible: !hasGameStarted,
-                    child: Align(
-                      alignment: const Alignment(0.0, -0.2),
-                      child: Text(
-                        kIsWeb ? 'click to begin' : 'tap to begin',
-                        style:
-                            Theme.of(context).textTheme.displayMedium!.copyWith(
-                                  color: Colors.teal.shade700,
-                                  fontSize: 16,
-                                ),
+                    //1. Tap to Begin :-
+                    Visibility(
+                      visible: !hasGameStarted,
+                      child: Align(
+                        alignment: const Alignment(0.0, -0.2),
+                        child: Text(
+                          kIsWeb ? 'click to begin' : 'tap to begin',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                color: const Color(0xFF3333AA),
+                                fontSize: 16,
+                              ),
+                        ),
                       ),
                     ),
-                  ),
 
-                  //2. Game Over Screen :-
-                  Visibility(
-                      visible: hasGameEnded,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              endText,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displayLarge!
-                                  .copyWith(
-                                    fontSize: kIsWeb
-                                        ? mediaQueryObject.size.width * 0.03
-                                        : mediaQueryObject.size.height * 0.025,
-                                    color: Colors.teal,
-                                  ),
-                            ),
-                            SizedBox(
-                                height: mediaQueryObject.size.height * 0.05),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.teal,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          mediaQueryObject.size.width * 0.02,
-                                      vertical: kIsWeb
-                                          ? mediaQueryObject.size.height * 0.02
+                    //2. Game Over Screen :-
+                    Visibility(
+                        visible: hasGameEnded,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                endText,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge!
+                                    .copyWith(
+                                      fontSize: kIsWeb
+                                          ? mediaQueryObject.size.width * 0.03
                                           : mediaQueryObject.size.height *
-                                              0.015,
+                                              0.025,
+                                      color: const Color(0xFF3333AA),
                                     ),
-                                  ),
-                                  onPressed: resetGame,
-                                  child: Icon(
-                                    Icons.replay,
-                                    size: kIsWeb
-                                        ? 20
-                                        : mediaQueryObject.size.height * 0.03,
-                                    color: Colors.tealAccent,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: mediaQueryObject.size.width * 0.03,
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.teal,
+                              ),
+                              SizedBox(
+                                  height: mediaQueryObject.size.height * 0.05),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF000088),
                                       padding: EdgeInsets.symmetric(
                                         horizontal:
                                             mediaQueryObject.size.width * 0.02,
@@ -529,44 +516,70 @@ class _GameScreenState extends State<GameScreen> {
                                                 0.02
                                             : mediaQueryObject.size.height *
                                                 0.015,
-                                      )),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Icon(
-                                    Icons.home_outlined,
-                                    size: kIsWeb
-                                        ? 20
-                                        : mediaQueryObject.size.height * 0.03,
-                                    color: Colors.tealAccent,
+                                      ),
+                                    ),
+                                    onPressed: resetGame,
+                                    child: Icon(
+                                      Icons.replay,
+                                      size: kIsWeb
+                                          ? 20
+                                          : mediaQueryObject.size.height * 0.03,
+                                      color: const Color(0xFF6666FF),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
+                                  SizedBox(
+                                    width: mediaQueryObject.size.width * 0.03,
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF000088),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              mediaQueryObject.size.width *
+                                                  0.02,
+                                          vertical: kIsWeb
+                                              ? mediaQueryObject.size.height *
+                                                  0.02
+                                              : mediaQueryObject.size.height *
+                                                  0.015,
+                                        )),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Icon(
+                                      Icons.home_outlined,
+                                      size: kIsWeb
+                                          ? 20
+                                          : mediaQueryObject.size.height * 0.03,
+                                      color: const Color(0xFF6666FF),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
 
-                  //BALL
-                  Container(
-                    alignment: Alignment(ballX, ballY),
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundColor:
-                          hasGameEnded ? Colors.tealAccent : Colors.teal,
+                    //BALL
+
+                    Ball(
+                      ballX: ballX,
+                      ballY: ballY,
+                      hasGameEnded: hasGameEnded,
                     ),
-                  ),
 
-                  //PLAYER
-                  MyPlayer(
-                    onHorizontalDragUpdate: onHorizontalDragUpdate,
-                    playerX: playerX,
-                    playerWidth: playerWidth,
-                  ),
+                    //PLAYER
+                    MyPlayer(
+                      onHorizontalDragUpdate: onHorizontalDragUpdate,
+                      playerX: playerX,
+                      playerWidth: playerWidth,
+                    ),
 
-                  //BRICKS
-                  ...generateBricks(),
-                ],
+                    //BRICKS
+                    ...generateBricks(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -575,5 +588,3 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 }
-
-
