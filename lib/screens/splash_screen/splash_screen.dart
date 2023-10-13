@@ -2,6 +2,7 @@ import 'package:breakout_revival/screens/homepage.dart';
 import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   static const route = '/';
@@ -24,7 +25,12 @@ class _SplashScreenState extends State<SplashScreen> {
           height: 200.h,
           child: Image.asset("assets/png/hng-logo.png"),
         ),
-        showAfter: (context) => const Text('Breakout Revival'),
+        showAfter: (context) => Text(
+          'Breakout\nRevival',
+          style: GoogleFonts.pressStart2p(
+            fontSize: 24.sp,
+          ),
+        ),
       ),
     );
   }

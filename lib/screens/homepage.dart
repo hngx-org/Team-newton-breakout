@@ -2,6 +2,9 @@ import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/component/settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const route = '/home-screen';
@@ -12,6 +15,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _highScore = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkScore();
+  }
+
+  checkScore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      _highScore = prefs.getInt('high') ?? 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQueryObject = MediaQuery.of(context);
@@ -22,6 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'High Score: $_highScore',
+                style: GoogleFonts.pressStart2p(
+                  fontSize: 18.sp,
+                ),
+              ),
+              SizedBox(
+                height: mediaQueryObject.size.height * 0.07,
+              ),
               Text(
                 kIsWeb
                     ? 'B R I C K - B R E A K E R'

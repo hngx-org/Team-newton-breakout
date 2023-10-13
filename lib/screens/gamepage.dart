@@ -2,9 +2,14 @@ import 'dart:async';
 import 'package:breakout_revival/component/ball.dart';
 import 'package:breakout_revival/component/bricks.dart';
 import 'package:breakout_revival/component/player.dart';
+import 'package:breakout_revival/screens/homepage.dart';
+import 'package:breakout_revival/utils/constants.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameScreen extends StatefulWidget {
@@ -39,83 +44,44 @@ class _GameScreenState extends State<GameScreen> {
   PLAYERDIRECTION playerDirection = PLAYERDIRECTION.stationary;
 
   //Player variables :-
-  double playerX = -0.5 *
-      (playerWidth); // its value is -0.5 *(playerWidth) to ensure that the player bar initially remains in the centre
-  static double playerWidth = 0.4; // ( 0.4, 0.8, 1.2)
+  double playerX =
+      0; // its value is -0.5 *(playerWidth) to ensure that the player bar initially remains in the centre
+  double playerWidth = 0.4; // ( 0.4, 0.8, 1.2)
   double playerSpeed = 0.2;
 
   //Brick variables :-
-  static double wallGap = 0.5 *
-      (2 - numOfBricksPerRow * brickWidth - (numOfBricksPerRow - 1) * brickGap);
-  static int numOfBricksPerRow = 4;
-  static double firstBrickX = -1 + wallGap;
-  static double firstBrickY = -0.9;
-  static double brickWidth = 0.4;
-  static double brickHeight = 0.1;
-  static double brickGap = 0.05;
+  double wallGap = 0;
+  int numOfBricksPerRow = 3;
+  double firstBrickX = 0;
+  double firstBrickY = -0.8;
+  double brickWidth = 0.4;
+  double brickHeight = 0.1;
+  double brickGap = 0.05;
+  int initialLevel = 1;
+  int numberOfRows = 3;
 
-  List brickList = [
-    [
-      firstBrickX,
-      firstBrickY,
-      false,
-    ],
-    [
-      firstBrickX + 1 * (brickWidth + brickGap),
-      firstBrickY,
-      false,
-    ],
-    [
-      firstBrickX + 2 * (brickWidth + brickGap),
-      firstBrickY,
-      false,
-    ],
-    [
-      firstBrickX + 3 * (brickWidth + brickGap),
-      firstBrickY,
-      false,
-    ],
-    [
-      firstBrickX + 0 * (brickWidth + brickGap),
-      firstBrickY + 1 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 1 * (brickWidth + brickGap),
-      firstBrickY + 1 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 2 * (brickWidth + brickGap),
-      firstBrickY + 1 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 3 * (brickWidth + brickGap),
-      firstBrickY + 1 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 0 * (brickWidth + brickGap),
-      firstBrickY + 2 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 1 * (brickWidth + brickGap),
-      firstBrickY + 2 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 2 * (brickWidth + brickGap),
-      firstBrickY + 2 * (brickHeight + brickGap),
-      false
-    ],
-    [
-      firstBrickX + 3 * (brickWidth + brickGap),
-      firstBrickY + 2 * (brickHeight + brickGap),
-      false
-    ],
-  ];
+  List<List<dynamic>> brickList = [];
+  late Timer timer;
+  List<List<dynamic>> generateBrickList(
+      int numRows,
+      int bricksPerRow,
+      double brickWidth,
+      double brickHeight,
+      double brickGap,
+      double brickX,
+      double brickY) {
+    List<List<dynamic>> bricksList = [];
+
+    for (int row = 0; row < numRows; row++) {
+      for (int col = 0; col < bricksPerRow; col++) {
+        double x = brickX + col * (brickWidth + brickGap);
+        double y = brickY + row * (brickHeight + brickGap);
+        bricksList.add([x, y, false]);
+      }
+    }
+
+    return bricksList;
+  }
 
   List<Widget> generateBricks() {
     List<Widget> list = [];
@@ -133,11 +99,52 @@ class _GameScreenState extends State<GameScreen> {
     return list;
   }
 
+  void resetGame() {
+    setState(() {
+      wallGap = 0;
+      hasGameEnded = false;
+      hasGameStarted = false;
+      brokenBrickCounter = 0;
+      ballX = 0.0;
+      ballY = 0.0;
+      ballXdir = DIRECTION.left;
+      ballYdir = DIRECTION.down;
+      numOfBricksPerRow = 3;
+      brickWidth = 0.4;
+      brickHeight = 0.1;
+      brickGap = 0.05;
+      playerX = -0.5 * (playerWidth);
+      brickList = generateBrickList(
+          3, 3, brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+    });
+  }
+
+  void nextLevel(int level) {
+    setState(() {
+      hasGameEnded = false;
+      hasGameStarted = false;
+      ballX = 0.0;
+      ballY = 0.0;
+      ballXdir = DIRECTION.left;
+      ballYdir = DIRECTION.down;
+      playerX = -0.5 * (playerWidth);
+      numberOfRows = level + 1;
+      numOfBricksPerRow = level * 3;
+      brickWidth = (numOfBricksPerRow / level) * 0.07;
+      brickHeight = 0.1 - (level / 100);
+      brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
+          brickHeight, brickGap, firstBrickX, firstBrickY);
+    });
+  }
+
   //Game settings :-
   bool hasGameStarted = false;
   bool hasGameEnded = false;
   int brokenBrickCounter = 0;
   String endText = '';
+  bool hasGamePaused = false;
+  FlameAudio _audio = FlameAudio();
+  bool isPlayerDied = false;
 
   //ALL FUNCTIONS :-
 
@@ -168,9 +175,10 @@ class _GameScreenState extends State<GameScreen> {
 
   void startGame() {
     setState(() {
+      hasGamePaused = false;
       hasGameStarted = true;
     });
-    Timer.periodic(const Duration(milliseconds: 10), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       setState(() {
         //The ball must be moving constantly from the starting of the game till its over
         //Thus, every 10 milliseconds we move the ball and uodate its DIRECTION
@@ -182,8 +190,8 @@ class _GameScreenState extends State<GameScreen> {
         //If at any point of the game, the player dies, we must :
         //  1. stop the timer,
         //  2. update the game state booleans
-
-        if (isPlayerDead() || areAllBricksBroken()) {
+        isPlayerDead();
+        if (isPlayerDied || areAllBricksBroken()) {
           timer.cancel();
           setState(() {
             hasGameEnded = true;
@@ -193,42 +201,21 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  void pauseGame() {
+  pauseGame() {
     setState(() {
-      hasGameStarted = true;
+      hasGameStarted = false;
+      hasGamePaused = true;
+      timer.cancel();
     });
-
-    // Timer.periodic(const Duration(milliseconds: 10), (timer) {
-    //   setState(() {
-    //     //The ball must be moving constantly from the starting of the game till its over
-    //     //Thus, every 10 milliseconds we move the ball and uodate its DIRECTION
-    //     moveBall();
-    //     updateBallDIRECTION();
-
-    //     //We must also keep checking if the ball has hit any bricks
-    //     checkForBrokenBricks();
-    //     //If at any point of the game, the player dies, we must :
-    //     //  1. stop the timer,
-    //     //  2. update the game state booleans
-
-    //     if (isPlayerDead() || areAllBricksBroken()) {
-    //       timer.cancel();
-    //       setState(() {
-    //         hasGameEnded = true;
-    //       });
-    //     }
-    //   });
-    // });
   }
 
   void checkForBrokenBricks() {
     for (int i = 0; i < brickList.length; i++) {
       if (ballX >= brickList[i][0] &&
-              ballX <= brickList[i][0] + brickWidth &&
-              ballY <= brickList[i][1] + brickHeight &&
-              brickList[i][2] == false
-          // && ballY >= brickList[i][1]) {
-          ) {
+          ballX <= brickList[i][0] + brickWidth &&
+          ballY <= brickList[i][1] + brickHeight &&
+          brickList[i][2] == false &&
+          ballY >= brickList[i][1]) {
         setState(() {
           brickList[i][2] = true;
           brokenBrickCounter++;
@@ -284,11 +271,14 @@ class _GameScreenState extends State<GameScreen> {
     return '';
   }
 
-  bool isPlayerDead() {
+  Future<bool> isPlayerDead() async {
     if (ballY > 0.94) {
       setState(() {
         endText = 'GAME OVER!';
+        isPlayerDied = true;
       });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('high', brokenBrickCounter);
       return true;
     }
     return false;
@@ -348,9 +338,9 @@ class _GameScreenState extends State<GameScreen> {
 
       //Horizontal Movement :
       if (ballXdir == DIRECTION.right) {
-        ballX += 1.5 * ballSpeed;
+        ballX += ballSpeed;
       } else if (ballXdir == DIRECTION.left) {
-        ballX -= 1.5 * ballSpeed;
+        ballX -= ballSpeed;
       }
     });
   }
@@ -377,6 +367,10 @@ class _GameScreenState extends State<GameScreen> {
         playerX += playerSpeed;
       });
     }
+  }
+
+  playMusic() {
+    FlameAudio.play(Constants.audio1);
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
@@ -410,26 +404,20 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  void resetGame() {
-    setState(() {
-      hasGameEnded = false;
-      hasGameStarted = false;
-      brokenBrickCounter = 0;
-      ballX = 0.0;
-      ballY = 0.0;
-      ballXdir = DIRECTION.left;
-      ballYdir = DIRECTION.down;
-      playerX = -0.5 * (playerWidth);
-      for (int i = 0; i < brickList.length; i++) {
-        brickList[i][2] = false;
-      }
-    });
-  }
-
   @override
   void initState() {
-    loadDetails();
     super.initState();
+    playerX = -0.5 * (playerWidth);
+    wallGap = 0.5 *
+        (2 -
+            numOfBricksPerRow * brickWidth -
+            (numOfBricksPerRow - 1) * brickGap);
+
+    firstBrickX = -1 + wallGap;
+
+    loadDetails();
+    brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
+        brickHeight, brickGap, firstBrickX, firstBrickY);
   }
 
   @override
@@ -442,8 +430,9 @@ class _GameScreenState extends State<GameScreen> {
         }
         return false;
       },
-      child: SafeArea(
-        child: RawKeyboardListener(
+      child: Scaffold(
+        backgroundColor: const Color(0xFF6666FF),
+        body: RawKeyboardListener(
           focusNode: FocusNode(),
           autofocus: true,
           onKey: (event) {
@@ -453,13 +442,57 @@ class _GameScreenState extends State<GameScreen> {
               movePlayerright();
             }
           },
-          child: GestureDetector(
-            onTap: hasGameStarted ? pauseGame : startGame,
-            child: Scaffold(
-              backgroundColor: const Color(0xFF6666FF),
-              body: Center(
+          child: SafeArea(
+            child: GestureDetector(
+              onTap: hasGameStarted ? null : startGame,
+              child: Center(
                 child: Stack(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: 20.0.h, right: 20.w, top: 20.h),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  hasGameEnded ? null : pauseGame();
+                                },
+                                child: Icon(
+                                  Icons.pause_circle_filled_outlined,
+                                  size: 28.sp,
+                                  color: const Color(0xFF3333AA),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  playMusic();
+                                },
+                                child: Icon(
+                                  Icons.music_note,
+                                  size: 28.sp,
+                                  color: const Color(0xFF3333AA),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              Text(
+                                'Score: $brokenBrickCounter',
+                                style: GoogleFonts.pressStart2p(
+                                  fontSize: 18.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     //PLAYER INTERACTIVE SCREENS :
 
                     //1. Tap to Begin :-
@@ -479,7 +512,32 @@ class _GameScreenState extends State<GameScreen> {
                         ),
                       ),
                     ),
-
+                    Visibility(
+                      visible: hasGamePaused,
+                      child: Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF000088),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: mediaQueryObject.size.width * 0.02,
+                              vertical: kIsWeb
+                                  ? mediaQueryObject.size.height * 0.02
+                                  : mediaQueryObject.size.height * 0.015,
+                            ),
+                          ),
+                          onPressed: () async {
+                            startGame();
+                          },
+                          child: Icon(
+                            Icons.pause_circle_filled_outlined,
+                            size: kIsWeb
+                                ? 20
+                                : mediaQueryObject.size.height * 0.03,
+                            color: const Color(0xFF6666FF),
+                          ),
+                        ),
+                      ),
+                    ),
                     //2. Game Over Screen :-
                     Visibility(
                         visible: hasGameEnded,
@@ -527,6 +585,45 @@ class _GameScreenState extends State<GameScreen> {
                                       color: const Color(0xFF6666FF),
                                     ),
                                   ),
+                                  Visibility(
+                                    visible: areAllBricksBroken(),
+                                    child: SizedBox(
+                                      width: mediaQueryObject.size.width * 0.03,
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: areAllBricksBroken(),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF000088),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              mediaQueryObject.size.width *
+                                                  0.02,
+                                          vertical: kIsWeb
+                                              ? mediaQueryObject.size.height *
+                                                  0.02
+                                              : mediaQueryObject.size.height *
+                                                  0.015,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          initialLevel = initialLevel + 1;
+                                        });
+                                        nextLevel(initialLevel);
+                                      },
+                                      child: Icon(
+                                        Icons.fast_forward_rounded,
+                                        size: kIsWeb
+                                            ? 20
+                                            : mediaQueryObject.size.height *
+                                                0.03,
+                                        color: const Color(0xFF6666FF),
+                                      ),
+                                    ),
+                                  ),
                                   SizedBox(
                                     width: mediaQueryObject.size.width * 0.03,
                                   ),
@@ -545,7 +642,10 @@ class _GameScreenState extends State<GameScreen> {
                                                   0.015,
                                         )),
                                     onPressed: () {
-                                      Navigator.of(context).pop();
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                              HomeScreen.route,
+                                              (route) => false);
                                     },
                                     child: Icon(
                                       Icons.home_outlined,

@@ -9,9 +9,13 @@ enum BallState {
 
 class Constants {
   static const String pngPath = 'assets/png';
+  static const String audioPath = 'assets/audio';
   static const String ballPath = '$pngPath/ball.png';
   static const String smallPlayerPath = '$pngPath/player-small.png';
   static const String bigPlayerPath = '$pngPath/player-big.png';
+
+  static const String audio1 = '$audioPath/music1.ogg';
+  static const String audio2 = '$audioPath/music2.ogg';
 
   static const ballRadius = 10.0;
 

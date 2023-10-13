@@ -5,6 +5,7 @@ import 'package:breakout_revival/screens/splash_screen/splash_screen.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,14 +29,12 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: const Color(0xFF6666FF),
               primaryColor: const Color(0xFF3333AA),
               cardColor: const Color(0xFFDFF3E8),
-              textTheme: const TextTheme(
-                  displayLarge: TextStyle(
-                    color: Color(0xFF000088),
-                    fontFamily: 'Press_Start_2P',
+              textTheme: TextTheme(
+                  displayLarge: GoogleFonts.pressStart2p(
+                    color: const Color(0xFF000088),
                   ),
-                  displayMedium: TextStyle(
-                    fontFamily: 'Amaranth',
-                    color: Color(0xFFDFF3E8),
+                  displayMedium: GoogleFonts.pressStart2p(
+                    color: const Color(0xFFDFF3E8),
                   )),
             ),
             routes: {
