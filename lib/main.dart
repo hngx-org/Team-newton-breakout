@@ -1,9 +1,12 @@
-import 'package:breakout_revival/game/screens/gamepage.dart';
-import 'package:breakout_revival/game/screens/homepage.dart';
-import 'package:breakout_revival/game/component/settings.dart';
+import 'package:breakout_revival/screens/gamepage.dart';
+import 'package:breakout_revival/screens/homepage.dart';
+import 'package:breakout_revival/component/settings.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Flame.device.fullScreen();
   runApp(const MyApp());
 }
 

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:breakout_revival/game/component/bricks.dart';
-import 'package:breakout_revival/game/component/player.dart';
+import 'package:breakout_revival/component/bricks.dart';
+import 'package:breakout_revival/component/player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +22,12 @@ enum DIRECTION {
   right,
 }
 
+enum PLAYERDIRECTION {
+  stationary,
+  left,
+  right,
+}
+
 class _GameScreenState extends State<GameScreen> {
   //Ball variables :-
   double ballX = 0.0;
@@ -29,6 +35,7 @@ class _GameScreenState extends State<GameScreen> {
   double ballSpeed = 0.022; //(0.010, 0.016, 0.022)
   DIRECTION ballXdir = DIRECTION.left;
   DIRECTION ballYdir = DIRECTION.down;
+  PLAYERDIRECTION playerDirection = PLAYERDIRECTION.stationary;
 
   //Player variables :-
   double playerX = -0.5 *
@@ -47,10 +54,26 @@ class _GameScreenState extends State<GameScreen> {
   static double brickGap = 0.05;
 
   List brickList = [
-    [firstBrickX, firstBrickY, false],
-    [firstBrickX + 1 * (brickWidth + brickGap), firstBrickY, false],
-    [firstBrickX + 2 * (brickWidth + brickGap), firstBrickY, false],
-    [firstBrickX + 3 * (brickWidth + brickGap), firstBrickY, false],
+    [
+      firstBrickX,
+      firstBrickY,
+      false,
+    ],
+    [
+      firstBrickX + 1 * (brickWidth + brickGap),
+      firstBrickY,
+      false,
+    ],
+    [
+      firstBrickX + 2 * (brickWidth + brickGap),
+      firstBrickY,
+      false,
+    ],
+    [
+      firstBrickX + 3 * (brickWidth + brickGap),
+      firstBrickY,
+      false,
+    ],
     [
       firstBrickX + 0 * (brickWidth + brickGap),
       firstBrickY + 1 * (brickHeight + brickGap),
@@ -208,6 +231,7 @@ class _GameScreenState extends State<GameScreen> {
         setState(() {
           brickList[i][2] = true;
           brokenBrickCounter++;
+
           //update ball's DIRECTION
           //Now to do this, we must determine which side of the brick has been hit
           // as that influences the DIRECTION in which the ball has to be reflected
@@ -290,6 +314,12 @@ class _GameScreenState extends State<GameScreen> {
         } else if (ballX == playerX + playerWidth) {
           ballXdir = DIRECTION.right;
         }
+        // Check the player's direction and set the ball's direction accordingly
+        if (playerDirection == PLAYERDIRECTION.left) {
+          ballXdir = DIRECTION.left;
+        } else if (playerDirection == PLAYERDIRECTION.right) {
+          ballXdir = DIRECTION.right;
+        }
       }
       //Bouncing ball downwards once it hits the top of the screen
       else if (ballY <= -1) {
@@ -331,6 +361,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void movePlayerleft() {
+    playerDirection = PLAYERDIRECTION.left;
     if (playerX - playerSpeed >= -1) {
       setState(() {
         playerX -= playerSpeed;
@@ -339,6 +370,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void movePlayerright() {
+    playerDirection = PLAYERDIRECTION.right;
     if (playerX + playerWidth + playerSpeed <= 1) {
       setState(() {
         playerX += playerSpeed;
@@ -351,6 +383,16 @@ class _GameScreenState extends State<GameScreen> {
 
     // Update the state of your container's position
     setState(() {
+      if (delta < 0) {
+        // If delta is negative, the player board is being dragged left
+        playerDirection = PLAYERDIRECTION.left;
+      } else if (delta > 0) {
+        // If delta is positive, the player board is being dragged right
+        playerDirection = PLAYERDIRECTION.right;
+      } else {
+        // If delta is zero, the player board is stationary
+        playerDirection = PLAYERDIRECTION.stationary;
+      }
       // Add the delta multiplied by the player speed to the initial position
       playerX += delta * playerSpeed;
 
