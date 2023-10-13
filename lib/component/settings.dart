@@ -41,7 +41,7 @@ class _SettingScreenState extends State<SettingScreen> {
     final mediaQueryObject = MediaQuery.of(context);
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.teal,
+      backgroundColor: const Color(0xFF6666FF),
       body: Center(
         child: SizedBox(
           width: mediaQueryObject.size.width * 0.7,
@@ -73,13 +73,12 @@ class _SettingScreenState extends State<SettingScreen> {
                       flex: 1,
                       child: Icon(
                         Icons.slow_motion_video,
-                        color: Colors.tealAccent,
                       ),
                     ),
                     Expanded(
                       flex: 10,
                       child: Slider(
-                        activeColor: Colors.tealAccent,
+                        activeColor: const Color(0xFF000088),
                         inactiveColor: Theme.of(context).cardColor,
                         label: '${_ballSpeed}x',
                         value: _ballSpeed,
@@ -97,7 +96,6 @@ class _SettingScreenState extends State<SettingScreen> {
                       flex: 1,
                       child: Icon(
                         Icons.fast_forward,
-                        color: Colors.tealAccent,
                       ),
                     ),
                   ],
@@ -116,13 +114,12 @@ class _SettingScreenState extends State<SettingScreen> {
                       flex: 1,
                       child: Icon(
                         Icons.slow_motion_video,
-                        color: Colors.tealAccent,
                       ),
                     ),
                     Expanded(
                       flex: 10,
                       child: Slider(
-                        activeColor: Colors.tealAccent,
+                        activeColor: const Color(0xFF000088),
                         inactiveColor: Theme.of(context).cardColor,
                         label: '${_plWidth}x',
                         value: _plWidth,
@@ -140,7 +137,6 @@ class _SettingScreenState extends State<SettingScreen> {
                       flex: 1,
                       child: Icon(
                         Icons.fast_forward,
-                        color: Colors.tealAccent,
                       ),
                     ),
                   ],

@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.internet"/>
     <application
         android:label="breakout_revival"
         android:name="${applicationName}"

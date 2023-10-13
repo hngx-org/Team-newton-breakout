@@ -7,31 +7,42 @@ enum BallState {
   completed,
 }
 
-const ballRadius = 10.0;
+class Constants {
+  static const String pngPath = 'assets/png';
+  static const String audioPath = 'assets/audio';
+  static const String ballPath = '$pngPath/ball.png';
+  static const String smallPlayerPath = '$pngPath/player-small.png';
+  static const String bigPlayerPath = '$pngPath/player-big.png';
 
-const ballColor = 0xFFFFFFFF;
+  static const String audio1 = '$audioPath/music1.ogg';
+  static const String audio2 = '$audioPath/music2.ogg';
 
-const brickColor = 0xFF24998B;
-const brickFontColor = 0xFFFFFFFF;
-const brickFontSize = 20.0;
+  static const ballRadius = 10.0;
 
-const numberOfBricksInRow = 7;
-const brickPadding = 8;
-const maxValueOfBrick = 10;
-const minValueOfBrick = -5;
+  static const ballColor = 0xFFFFFFFF;
 
-const panelColor = 0xFF1B1B1B;
+  static const brickColor = 0xFF24998B;
+  static const brickFontColor = 0xFFFFFFFF;
+  static const brickFontSize = 20.0;
 
-const Color startButtonColor = Color.fromRGBO(235, 32, 93, 1);
-const Color continueButtonColor = Color.fromRGBO(235, 32, 93, 1);
-const Color restartButtonColor = Color.fromRGBO(243, 181, 45, 1);
+  static const numberOfBricksInRow = 7;
+  static const brickPadding = 8;
+  static const maxValueOfBrick = 10;
+  static const minValueOfBrick = -5;
 
-const String gameTitle = 'The BricksBreaker Game';
+  static const panelColor = 0xFF1B1B1B;
 
-const String brickRowRemoverText = '💣';
-const String brickColumnRemoverText = '🧨';
-const double powerUpProbability = 15;
+  static const Color startButtonColor = Color.fromRGBO(235, 32, 93, 1);
+  static const Color continueButtonColor = Color.fromRGBO(235, 32, 93, 1);
+  static const Color restartButtonColor = Color.fromRGBO(243, 181, 45, 1);
 
-const String brickRowRemoverAudio = 'row_explosion.mp3';
-const String brickColumnRemoverAudio = 'column_explosion.mp3';
-const String ballAudio = 'ball.mp3';
+  static const String gameTitle = 'The BricksBreaker Game';
+
+  static const String brickRowRemoverText = '💣';
+  static const String brickColumnRemoverText = '🧨';
+  static const double powerUpProbability = 15;
+
+  static const String brickRowRemoverAudio = 'row_explosion.mp3';
+  static const String brickColumnRemoverAudio = 'column_explosion.mp3';
+  static const String ballAudio = 'ball.mp3';
+}
