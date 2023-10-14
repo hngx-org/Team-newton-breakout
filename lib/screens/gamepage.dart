@@ -232,6 +232,10 @@ class _GameScreenState extends State<GameScreen> {
           brickList[i][2] = true;
           brokenBrickCounter++;
           scores = scores + brokenBrickCounter;
+
+          // Play the "Brick Break" sound effect here
+        FlameAudio.play(Constants.brickBreakSound,);
+
           //update ball's DIRECTION
           //Now to do this, we must determine which side of the brick has been hit
           // as that influences the DIRECTION in which the ball has to be reflected
@@ -286,6 +290,7 @@ class _GameScreenState extends State<GameScreen> {
   bool isPlayerDead() {
     if (ballY > 0.94) {
       saveScores();
+    FlameAudio.play(Constants.gameOverSound,);
       setState(() {
         endText = 'GAME OVER!';
       });
@@ -304,6 +309,7 @@ class _GameScreenState extends State<GameScreen> {
 
   bool areAllBricksBroken() {
     if (brokenBrickCounter == brickList.length) {
+      FlameAudio.play(Constants.victorySound,);
       setState(() {
         endText = 'YOU WON!';
       });
@@ -426,6 +432,7 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+
   @override
   void initState() {
     super.initState();
@@ -440,6 +447,11 @@ class _GameScreenState extends State<GameScreen> {
     loadDetails();
     brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
         brickHeight, brickGap, firstBrickX, firstBrickY);
+
+    // Load sound effects
+  FlameAudio.audioCache.load(Constants.brickBreakSound,);
+  FlameAudio.audioCache.load(Constants.gameOverSound);
+  FlameAudio.audioCache.load(Constants.victorySound);
   }
 
   @override
@@ -495,6 +507,7 @@ class _GameScreenState extends State<GameScreen> {
                                 onTap: () {
                                   playMusic();
                                 },
+                                
                                 child: Icon(
                                   Icons.music_note,
                                   size: 28.sp,
