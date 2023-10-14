@@ -1,10 +1,13 @@
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/component/settings.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   static const route = '/home-screen';
@@ -22,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     checkScore();
+    // playMusic();
   }
 
   checkScore() async {
@@ -30,6 +34,26 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _highScore = prefs.getInt('high') ?? 0;
     });
+  }
+
+  void playMusic() {
+    if (FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.pause();
+    } else {
+      FlameAudio.bgm.play(Constants.audio3);
+    }
+  }
+
+  void pauseMusic() {
+    if (FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.pause();
+    }
+  }
+
+  @override
+  void dispose() {
+   playMusic();
+    super.dispose();
   }
 
   @override
@@ -106,6 +130,49 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ],
+              ),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: const Color(0xFF000088),
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: mediaQueryObject.size.width * 0.02,
+              //       vertical: kIsWeb
+              //           ? mediaQueryObject.size.height * 0.02
+              //           : mediaQueryObject.size.height * 0.015,
+              //     ),
+              //   ),
+              //   onPressed: () {
+              //     Navigator.of(context).pushNamed(GameScreen.route);
+              //   },
+              //   child: Icon(
+              //     Icons.play_arrow_rounded,
+              //     size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+              //   ),
+              // ),
+              SizedBox(
+                height: mediaQueryObject.size.width * 0.03,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF000088),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: mediaQueryObject.size.width * 0.02,
+                    vertical: kIsWeb
+                        ? mediaQueryObject.size.height * 0.02
+                        : mediaQueryObject.size.height * 0.015,
+                  ),
+                ),
+                onPressed: () {
+                  // Play or pause music based on its current state
+                  FlameAudio.bgm.isPlaying ?
+                  pauseMusic() : playMusic();
+                },
+                child: Icon(
+                  FlameAudio.bgm.isPlaying
+                      ? Icons.pause_circle_filled
+                      : Icons.play_circle_filled,
+                  size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                ),
               ),
               SizedBox(
                 height: mediaQueryObject.size.height * 0.02,

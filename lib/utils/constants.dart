@@ -16,6 +16,10 @@ class Constants {
 
   static const String audio1 = 'music1.ogg';
   static const String audio2 = 'music2.ogg';
+  static const String audio3 = 'music3.ogg';
+  static const String brickBreakSound = 'brick.ogg';
+  static const String victorySound = 'succes.ogg';
+  static const String gameOverSound = 'failure.ogg';
 
   static const ballRadius = 10.0;
 
