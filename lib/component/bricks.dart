@@ -7,6 +7,7 @@ class MyBrick extends StatelessWidget {
   final double brickHeight;
   final double brickWidth;
   final bool brickBroken;
+  final bool brickCracked;
   final int numberOfBricksPerRow;
   const MyBrick({
     super.key,
@@ -16,6 +17,7 @@ class MyBrick extends StatelessWidget {
     required this.brickWidth,
     required this.brickBroken,
     required this.numberOfBricksPerRow,
+    required this.brickCracked,
   });
 
   @override
@@ -29,7 +31,7 @@ class MyBrick extends StatelessWidget {
           height: (MediaQuery.of(context).size.height * brickHeight) / 2,
           width: (MediaQuery.of(context).size.width * brickWidth) / 2,
           child: Image.asset(
-            Constants.brickPath,
+            brickCracked ? Constants.crackedBrickPath : Constants.brickPath,
           ),
         ),
       ),

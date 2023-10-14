@@ -1,6 +1,7 @@
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:breakout_revival/component/settings.dart';
+import 'package:breakout_revival/screens/instuctionpage.dart';
 import 'package:breakout_revival/screens/splash_screen/splash_screen.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
               cardColor: const Color(0xFFDFF3E8),
               textTheme: TextTheme(
                   displayLarge: GoogleFonts.pressStart2p(
-                    color: const Color(0xFF000088),
+                    color: const Color(0xFF8cc63f),
                   ),
                   displayMedium: GoogleFonts.pressStart2p(
                     color: const Color(0xFFDFF3E8),
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
+              InstructionsScreen.route: (context) => const InstructionsScreen()
             },
           );
         });

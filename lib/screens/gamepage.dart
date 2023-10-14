@@ -78,7 +78,7 @@ class _GameScreenState extends State<GameScreen> {
       for (int col = 0; col < bricksPerRow; col++) {
         double x = brickX + col * (brickWidth + brickGap);
         double y = brickY + row * (brickHeight + brickGap);
-        bricksList.add([x, y, false]);
+        bricksList.add([x, y, false, false]);
       }
     }
 
@@ -95,6 +95,7 @@ class _GameScreenState extends State<GameScreen> {
           brickHeight: brickHeight,
           brickWidth: brickWidth,
           brickBroken: brickList[i][2],
+          brickCracked: brickList[i][3],
           numberOfBricksPerRow: numOfBricksPerRow,
         ),
       );
@@ -130,29 +131,79 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void nextLevel(int level) {
-    setState(() {
-      hasGameEnded = false;
-      hasGameStarted = false;
-      ballX = 0.0;
-      ballY = 0.0;
+    if (level == 2) {
+      setState(() {
+        hasGameEnded = false;
+        hasGameStarted = false;
+        ballX = 0.0;
+        ballY = 0.0;
 
-      brokenBrickCounter = 0;
-      ballXdir = DIRECTION.left;
-      ballYdir = DIRECTION.down;
-      playerX = -0.5 * (playerWidth);
-      numberOfRows = level + 1;
-      numOfBricksPerRow = level * 3;
-      brickGap = 0.02;
-      brickWidth = (numOfBricksPerRow / level) * 0.07;
-      brickHeight = 0.1 - (level / 100);
-      wallGap = 0.5 *
-          (2 -
-              numOfBricksPerRow * brickWidth -
-              (numOfBricksPerRow - 1) * brickGap);
-      firstBrickX = -1 + wallGap;
-      brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
-          brickHeight, brickGap, firstBrickX, firstBrickY);
-    });
+        brokenBrickCounter = 0;
+        ballXdir = DIRECTION.left;
+        ballYdir = DIRECTION.down;
+        playerX = -0.5 * (playerWidth);
+        numberOfRows = 5;
+        numOfBricksPerRow = 4;
+        brickGap = 0.01;
+        brickWidth = 0.5;
+        brickHeight = brickHeight;
+        wallGap = 0.5 *
+            (2 -
+                numOfBricksPerRow * brickWidth -
+                (numOfBricksPerRow - 1) * brickGap);
+        firstBrickX = -1 + wallGap;
+        brickList = generateBrickList(numberOfRows, numOfBricksPerRow,
+            brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+      });
+    } else if (level == 3) {
+      setState(() {
+        hasGameEnded = false;
+        hasGameStarted = false;
+        ballX = 0.0;
+        ballY = 0.0;
+
+        brokenBrickCounter = 0;
+        ballXdir = DIRECTION.left;
+        ballYdir = DIRECTION.down;
+        playerX = -0.5 * (playerWidth);
+        numberOfRows = 6;
+        numOfBricksPerRow = 6;
+        brickGap = 0.009;
+        brickWidth = 0.3;
+        brickHeight = brickHeight;
+        wallGap = 0.5 *
+            (2 -
+                numOfBricksPerRow * brickWidth -
+                (numOfBricksPerRow - 1) * brickGap);
+        firstBrickX = -1 + wallGap;
+        brickList = generateBrickList(numberOfRows, numOfBricksPerRow,
+            brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+      });
+    } else if (level == 4) {
+      setState(() {
+        hasGameEnded = false;
+        hasGameStarted = false;
+        ballX = 0.0;
+        ballY = 0.0;
+
+        brokenBrickCounter = 0;
+        ballXdir = DIRECTION.left;
+        ballYdir = DIRECTION.down;
+        playerX = -0.5 * (playerWidth);
+        numberOfRows = 8;
+        numOfBricksPerRow = 7;
+        brickGap = 0.007;
+        brickWidth = 0.2;
+        brickHeight = brickHeight;
+        wallGap = 0.5 *
+            (2 -
+                numOfBricksPerRow * brickWidth -
+                (numOfBricksPerRow - 1) * brickGap);
+        firstBrickX = -1 + wallGap;
+        brickList = generateBrickList(numberOfRows, numOfBricksPerRow,
+            brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+      });
+    }
   }
 
   //Game settings :-
@@ -236,9 +287,21 @@ class _GameScreenState extends State<GameScreen> {
           brickList[i][2] == false &&
           ballY >= brickList[i][1]) {
         setState(() {
-          brickList[i][2] = true;
-          brokenBrickCounter++;
-          scores = scores + brokenBrickCounter;
+          if (initialLevel > 2) {
+            if (brickList[i][3] == false) {
+              brickList[i][3] = true;
+              brokenBrickCounter++;
+              scores = scores + brokenBrickCounter;
+            } else {
+              brickList[i][2] = true;
+              brokenBrickCounter++;
+              scores = scores + brokenBrickCounter;
+            }
+          } else {
+            brickList[i][2] = true;
+            brokenBrickCounter++;
+            scores = scores + brokenBrickCounter;
+          }
 
           // Play the "Brick Break" sound effect here
           FlameAudio.play(
@@ -350,15 +413,28 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   bool areAllBricksBroken() {
-    if (brokenBrickCounter == brickList.length) {
-      FlameAudio.play(
-        Constants.victorySound,
-      );
-      setState(() {
-        endText = 'YOU WON!';
-      });
-      return true;
+    if (initialLevel > 2) {
+      if (brokenBrickCounter == (brickList.length * 2)) {
+        FlameAudio.play(
+          Constants.victorySound,
+        );
+        setState(() {
+          endText = 'YOU WON!';
+        });
+        return true;
+      }
+    } else {
+      if (brokenBrickCounter == brickList.length) {
+        FlameAudio.play(
+          Constants.victorySound,
+        );
+        setState(() {
+          endText = 'YOU WON!';
+        });
+        return true;
+      }
     }
+
     return false;
   }
 
@@ -388,7 +464,7 @@ class _GameScreenState extends State<GameScreen> {
         } else if (playerDirection == PLAYERDIRECTION.right &&
             ballXdir == DIRECTION.right &&
             ballYdir == DIRECTION.down) {
-          ballXdir = DIRECTION.right;
+          ballXdir = DIRECTION.left;
           ballYdir = DIRECTION.up;
         } else if (playerDirection == PLAYERDIRECTION.right &&
             ballXdir == DIRECTION.left &&
@@ -518,7 +594,10 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void dispose() {
-    timer.cancel();
+    if (timer.isActive) {
+      timer.cancel();
+    }
+
     super.dispose();
   }
 
@@ -527,7 +606,7 @@ class _GameScreenState extends State<GameScreen> {
     final mediaQueryObject = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async {
-        if (hasGameEnded) {
+        if (hasGameEnded || !hasGameStarted) {
           return true;
         }
         return false;
@@ -641,7 +720,7 @@ class _GameScreenState extends State<GameScreen> {
                           alignment: const Alignment(0, -0.1),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF000088),
+                              backgroundColor: const Color(0xFF8cc63f),
                               padding: EdgeInsets.symmetric(
                                 horizontal: mediaQueryObject.size.width * 0.02,
                                 vertical: kIsWeb
@@ -691,7 +770,7 @@ class _GameScreenState extends State<GameScreen> {
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            const Color(0xFF000088),
+                                            const Color(0xFF8cc63f),
                                         padding: EdgeInsets.symmetric(
                                           horizontal:
                                               mediaQueryObject.size.width *
@@ -725,7 +804,7 @@ class _GameScreenState extends State<GameScreen> {
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
-                                              const Color(0xFF000088),
+                                              const Color(0xFF8cc63f),
                                           padding: EdgeInsets.symmetric(
                                             horizontal:
                                                 mediaQueryObject.size.width *
@@ -759,7 +838,7 @@ class _GameScreenState extends State<GameScreen> {
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
-                                              const Color(0xFF000088),
+                                              const Color(0xFF8cc63f),
                                           padding: EdgeInsets.symmetric(
                                             horizontal:
                                                 mediaQueryObject.size.width *
