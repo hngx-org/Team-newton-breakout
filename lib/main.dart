@@ -1,6 +1,7 @@
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:breakout_revival/component/settings.dart';
+import 'package:breakout_revival/screens/instuctionpage.dart';
 import 'package:breakout_revival/screens/splash_screen/splash_screen.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
+              InstructionsScreen.route:(context) => InstructionsScreen()
             },
           );
         });
