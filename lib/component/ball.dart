@@ -242,7 +242,7 @@ class Ball extends StatelessWidget {
     return Container(
       alignment: Alignment(ballX, ballY),
       child: CircleAvatar(
-        radius: 10,
+        radius: Constants.ballRadius,
         child: Image.asset(Constants.ballPath),
       ),
     );

@@ -55,11 +55,11 @@ class _GameScreenState extends State<GameScreen> {
   int numOfBricksPerRow = 3;
   double firstBrickX = 0;
   double firstBrickY = -0.8;
-  double brickWidth = 1;
-  double brickHeight = 1;
-  double brickGap = 0.05;
+  double brickWidth = 0.6;
+  double brickHeight = 0.07;
+  double brickGap = 0.02;
   int initialLevel = 1;
-  int numberOfRows = 3;
+  int numberOfRows = 4;
   List numberOfLives = [1, 1, 1];
 
   List<List<dynamic>> brickList = [];
@@ -95,6 +95,7 @@ class _GameScreenState extends State<GameScreen> {
           brickHeight: brickHeight,
           brickWidth: brickWidth,
           brickBroken: brickList[i][2],
+          numberOfBricksPerRow: numOfBricksPerRow,
         ),
       );
     }
@@ -114,9 +115,9 @@ class _GameScreenState extends State<GameScreen> {
       ballXdir = DIRECTION.left;
       ballYdir = DIRECTION.down;
       numOfBricksPerRow = 3;
-      brickWidth = 0.4;
-      brickHeight = 0.1;
-      brickGap = 0.05;
+      brickWidth = 0.6;
+      brickHeight = 0.07;
+      brickGap = 0.02;
       wallGap = 0.5 *
           (2 -
               numOfBricksPerRow * brickWidth -
@@ -141,6 +142,7 @@ class _GameScreenState extends State<GameScreen> {
       playerX = -0.5 * (playerWidth);
       numberOfRows = level + 1;
       numOfBricksPerRow = level * 3;
+      brickGap = 0.02;
       brickWidth = (numOfBricksPerRow / level) * 0.07;
       brickHeight = 0.1 - (level / 100);
       wallGap = 0.5 *
@@ -218,7 +220,6 @@ class _GameScreenState extends State<GameScreen> {
 
   pauseGame() {
     setState(() {
-      hasGameStarted = false;
       if (!hasGamePaused) {
         hasGamePaused = true;
       }
@@ -238,6 +239,12 @@ class _GameScreenState extends State<GameScreen> {
           brickList[i][2] = true;
           brokenBrickCounter++;
           scores = scores + brokenBrickCounter;
+
+          // Play the "Brick Break" sound effect here
+          FlameAudio.play(
+            Constants.brickBreakSound,
+          );
+
           //update ball's DIRECTION
           //Now to do this, we must determine which side of the brick has been hit
           // as that influences the DIRECTION in which the ball has to be reflected
@@ -292,6 +299,9 @@ class _GameScreenState extends State<GameScreen> {
   bool isPlayerDead() {
     if (ballY > 0.94 && numberOfLives[0] == 0) {
       saveScores();
+      FlameAudio.play(
+        Constants.gameOverSound,
+      );
       setState(() {
         endText = 'GAME OVER!';
       });
@@ -341,6 +351,9 @@ class _GameScreenState extends State<GameScreen> {
 
   bool areAllBricksBroken() {
     if (brokenBrickCounter == brickList.length) {
+      FlameAudio.play(
+        Constants.victorySound,
+      );
       setState(() {
         endText = 'YOU WON!';
       });
@@ -352,7 +365,7 @@ class _GameScreenState extends State<GameScreen> {
   void updateBallDIRECTION() {
     setState(() {
       //Bouncing ball upwards once it hits player bar
-      if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.88) {
+      if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.84) {
         ballYdir = DIRECTION.up;
         //If the ball hits the exact edges of the player bar, we show an angle in its reflection
         if (ballX == playerX) {
@@ -361,10 +374,27 @@ class _GameScreenState extends State<GameScreen> {
           ballXdir = DIRECTION.right;
         }
         // Check the player's direction and set the ball's direction accordingly
-        if (playerDirection == PLAYERDIRECTION.left) {
-          ballXdir = DIRECTION.left;
-        } else if (playerDirection == PLAYERDIRECTION.right) {
+
+        if (playerDirection == PLAYERDIRECTION.left &&
+            ballXdir == DIRECTION.right &&
+            ballYdir == DIRECTION.down) {
           ballXdir = DIRECTION.right;
+          ballYdir = DIRECTION.up;
+        } else if (playerDirection == PLAYERDIRECTION.left &&
+            ballXdir == DIRECTION.left &&
+            ballYdir == DIRECTION.down) {
+          ballXdir = DIRECTION.left;
+          ballYdir = DIRECTION.up;
+        } else if (playerDirection == PLAYERDIRECTION.right &&
+            ballXdir == DIRECTION.right &&
+            ballYdir == DIRECTION.down) {
+          ballXdir = DIRECTION.right;
+          ballYdir = DIRECTION.up;
+        } else if (playerDirection == PLAYERDIRECTION.right &&
+            ballXdir == DIRECTION.left &&
+            ballYdir == DIRECTION.down) {
+          ballXdir = DIRECTION.left;
+          ballYdir = DIRECTION.up;
         }
       }
       //Bouncing ball downwards once it hits the top of the screen
@@ -477,6 +507,19 @@ class _GameScreenState extends State<GameScreen> {
     loadDetails();
     brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
         brickHeight, brickGap, firstBrickX, firstBrickY);
+
+    // Load sound effects
+    FlameAudio.audioCache.load(
+      Constants.brickBreakSound,
+    );
+    FlameAudio.audioCache.load(Constants.gameOverSound);
+    FlameAudio.audioCache.load(Constants.victorySound);
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -524,9 +567,12 @@ class _GameScreenState extends State<GameScreen> {
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: numberOfLives[i] == 1
-                                            ? const Color(0xFF3333AA)
+                                            ? const Color(0xFF8cc63f)
                                             : Colors.transparent,
-                                        border: Border.all(width: 1)),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Colors.white,
+                                        )),
                                   ),
                                 Expanded(
                                   child: SizedBox(
@@ -540,7 +586,7 @@ class _GameScreenState extends State<GameScreen> {
                                   child: Icon(
                                     Icons.pause_circle_filled_outlined,
                                     size: 28.sp,
-                                    color: const Color(0xFF3333AA),
+                                    color: const Color(0xFF8cc63f),
                                   ),
                                 ),
                                 SizedBox(
@@ -553,7 +599,7 @@ class _GameScreenState extends State<GameScreen> {
                                   child: Icon(
                                     Icons.music_note,
                                     size: 28.sp,
-                                    color: const Color(0xFF3333AA),
+                                    color: const Color(0xFF8cc63f),
                                   ),
                                 ),
                                 SizedBox(
@@ -583,7 +629,7 @@ class _GameScreenState extends State<GameScreen> {
                                 .textTheme
                                 .displayMedium!
                                 .copyWith(
-                                  color: const Color(0xFF3333AA),
+                                  color: const Color(0xFF8cc63f),
                                   fontSize: 16,
                                 ),
                           ),
@@ -633,7 +679,7 @@ class _GameScreenState extends State<GameScreen> {
                                             ? mediaQueryObject.size.width * 0.03
                                             : mediaQueryObject.size.height *
                                                 0.025,
-                                        color: const Color(0xFF3333AA),
+                                        color: const Color(0xFF8cc63f),
                                       ),
                                 ),
                                 SizedBox(

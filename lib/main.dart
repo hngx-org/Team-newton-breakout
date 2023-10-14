@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: SplashScreen.route,
             theme: ThemeData.light().copyWith(
-              primaryColor: const Color(0xFF3333AA),
+              primaryColor: const Color(0xFF8cc63f),
               cardColor: const Color(0xFFDFF3E8),
               textTheme: TextTheme(
                   displayLarge: GoogleFonts.pressStart2p(

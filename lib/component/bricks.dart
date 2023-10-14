@@ -25,20 +25,12 @@ class MyBrick extends StatelessWidget {
       child: Container(
         alignment:
             Alignment((2 * brickX + brickWidth) / (2 - brickWidth), brickY),
-        child: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage(
-              Constants.brickPath,
-            ),
-            fit: BoxFit.cover,
-          )),
-          height: MediaQuery.of(context).size.height *
-              brickHeight /
-              numberOfBricksPerRow,
-          width: MediaQuery.of(context).size.width *
-              brickWidth /
-              numberOfBricksPerRow,
+        child: SizedBox(
+          height: (MediaQuery.of(context).size.height * brickHeight) / 2,
+          width: (MediaQuery.of(context).size.width * brickWidth) / 2,
+          child: Image.asset(
+            Constants.brickPath,
+          ),
         ),
       ),
     );
