@@ -22,7 +22,7 @@ class MyPlayer extends StatelessWidget {
             width: MediaQuery.of(context).size.width *
                 playerWidth! /
                 2, // Adjust width to your requirements
-            height: 15.h, // Adjust height to your requirements
+            height: 25.h, // Adjust height to your requirements
             decoration: BoxDecoration(
               borderRadius:
                   BorderRadius.circular(10), // Adjust the border radius

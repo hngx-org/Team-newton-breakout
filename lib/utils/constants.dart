@@ -14,8 +14,8 @@ class Constants {
   static const String smallPlayerPath = '$pngPath/player-small.png';
   static const String bigPlayerPath = '$pngPath/player-big.png';
 
-  static const String audio1 = '$audioPath/music1.ogg';
-  static const String audio2 = '$audioPath/music2.ogg';
+  static const String audio1 = 'music1.ogg';
+  static const String audio2 = 'music2.ogg';
 
   static const ballRadius = 10.0;
 

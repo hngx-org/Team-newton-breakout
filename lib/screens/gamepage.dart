@@ -101,10 +101,12 @@ class _GameScreenState extends State<GameScreen> {
 
   void resetGame() {
     setState(() {
-      wallGap = 0;
       hasGameEnded = false;
       hasGameStarted = false;
       brokenBrickCounter = 0;
+      firstBrickX = -1 + wallGap;
+
+      scores = 0;
       ballX = 0.0;
       ballY = 0.0;
       ballXdir = DIRECTION.left;
@@ -113,6 +115,10 @@ class _GameScreenState extends State<GameScreen> {
       brickWidth = 0.4;
       brickHeight = 0.1;
       brickGap = 0.05;
+      wallGap = 0.5 *
+          (2 -
+              numOfBricksPerRow * brickWidth -
+              (numOfBricksPerRow - 1) * brickGap);
       playerX = -0.5 * (playerWidth);
       brickList = generateBrickList(
           3, 3, brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
@@ -125,6 +131,8 @@ class _GameScreenState extends State<GameScreen> {
       hasGameStarted = false;
       ballX = 0.0;
       ballY = 0.0;
+
+      brokenBrickCounter = 0;
       ballXdir = DIRECTION.left;
       ballYdir = DIRECTION.down;
       playerX = -0.5 * (playerWidth);
@@ -132,6 +140,11 @@ class _GameScreenState extends State<GameScreen> {
       numOfBricksPerRow = level * 3;
       brickWidth = (numOfBricksPerRow / level) * 0.07;
       brickHeight = 0.1 - (level / 100);
+      wallGap = 0.5 *
+          (2 -
+              numOfBricksPerRow * brickWidth -
+              (numOfBricksPerRow - 1) * brickGap);
+      firstBrickX = -1 + wallGap;
       brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
           brickHeight, brickGap, firstBrickX, firstBrickY);
     });
@@ -141,10 +154,9 @@ class _GameScreenState extends State<GameScreen> {
   bool hasGameStarted = false;
   bool hasGameEnded = false;
   int brokenBrickCounter = 0;
+  int scores = 0;
   String endText = '';
   bool hasGamePaused = false;
-  FlameAudio _audio = FlameAudio();
-  bool isPlayerDied = false;
 
   //ALL FUNCTIONS :-
 
@@ -190,8 +202,8 @@ class _GameScreenState extends State<GameScreen> {
         //If at any point of the game, the player dies, we must :
         //  1. stop the timer,
         //  2. update the game state booleans
-        isPlayerDead();
-        if (isPlayerDied || areAllBricksBroken()) {
+
+        if (isPlayerDead() || areAllBricksBroken()) {
           timer.cancel();
           setState(() {
             hasGameEnded = true;
@@ -219,7 +231,7 @@ class _GameScreenState extends State<GameScreen> {
         setState(() {
           brickList[i][2] = true;
           brokenBrickCounter++;
-
+          scores = scores + brokenBrickCounter;
           //update ball's DIRECTION
           //Now to do this, we must determine which side of the brick has been hit
           // as that influences the DIRECTION in which the ball has to be reflected
@@ -271,17 +283,23 @@ class _GameScreenState extends State<GameScreen> {
     return '';
   }
 
-  Future<bool> isPlayerDead() async {
+  bool isPlayerDead() {
     if (ballY > 0.94) {
+      saveScores();
       setState(() {
         endText = 'GAME OVER!';
-        isPlayerDied = true;
       });
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setInt('high', brokenBrickCounter);
       return true;
     }
     return false;
+  }
+
+  saveScores() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final getScore = prefs.getInt('high') ?? 0;
+    if (getScore < scores) {
+      await prefs.setInt('high', scores);
+    }
   }
 
   bool areAllBricksBroken() {
@@ -370,7 +388,11 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   playMusic() {
-    FlameAudio.play(Constants.audio1);
+    if (FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.pause();
+    } else {
+      FlameAudio.bgm.play(Constants.audio1);
+    }
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
@@ -483,7 +505,7 @@ class _GameScreenState extends State<GameScreen> {
                                 width: 20.w,
                               ),
                               Text(
-                                'Score: $brokenBrickCounter',
+                                'Score: $scores',
                                 style: GoogleFonts.pressStart2p(
                                   fontSize: 18.sp,
                                 ),
