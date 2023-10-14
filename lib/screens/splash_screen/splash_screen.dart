@@ -12,7 +12,22 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late FlameSplashController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = FlameSplashController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           height: 200.h,
           child: Image.asset("assets/png/hng-logo.png"),
         ),
+        controller: _controller,
         showAfter: (context) => Text(
           'Breakout\nRevival',
           style: GoogleFonts.pressStart2p(
