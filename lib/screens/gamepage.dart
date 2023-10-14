@@ -59,6 +59,7 @@ class _GameScreenState extends State<GameScreen> {
   double brickGap = 0.05;
   int initialLevel = 1;
   int numberOfRows = 3;
+  List numberOfLives = [1, 1, 1];
 
   List<List<dynamic>> brickList = [];
   late Timer timer;
@@ -104,8 +105,8 @@ class _GameScreenState extends State<GameScreen> {
       hasGameEnded = false;
       hasGameStarted = false;
       brokenBrickCounter = 0;
-      firstBrickX = -1 + wallGap;
-
+      numberOfLives = [1, 1, 1];
+      initialLevel = 1;
       scores = 0;
       ballX = 0.0;
       ballY = 0.0;
@@ -120,6 +121,7 @@ class _GameScreenState extends State<GameScreen> {
               numOfBricksPerRow * brickWidth -
               (numOfBricksPerRow - 1) * brickGap);
       playerX = -0.5 * (playerWidth);
+      firstBrickX = -1 + wallGap;
       brickList = generateBrickList(
           3, 3, brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
     });
@@ -216,7 +218,10 @@ class _GameScreenState extends State<GameScreen> {
   pauseGame() {
     setState(() {
       hasGameStarted = false;
-      hasGamePaused = true;
+      if (!hasGamePaused) {
+        hasGamePaused = true;
+      }
+
       timer.cancel();
     });
   }
@@ -284,12 +289,43 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   bool isPlayerDead() {
-    if (ballY > 0.94) {
+    if (ballY > 0.94 && numberOfLives[0] == 0) {
       saveScores();
       setState(() {
         endText = 'GAME OVER!';
       });
       return true;
+    }
+    if (ballY > 0.94) {
+      if (numberOfLives[2] != 0) {
+        setState(() {
+          timer.cancel();
+          ballX = 0.0;
+          ballY = 0.0;
+          hasGamePaused = true;
+          numberOfLives[2] = 0;
+        });
+      } else {
+        if (numberOfLives[1] != 0) {
+          setState(() {
+            timer.cancel();
+            ballX = 0.0;
+            hasGamePaused = true;
+            ballY = 0.0;
+            numberOfLives[1] = 0;
+          });
+        } else {
+          if (numberOfLives[0] != 0) {
+            setState(() {
+              timer.cancel();
+              ballX = 0.0;
+              hasGamePaused = true;
+              ballY = 0.0;
+              numberOfLives[0] = 0;
+            });
+          }
+        }
+      }
     }
     return false;
   }
@@ -472,12 +508,29 @@ class _GameScreenState extends State<GameScreen> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          bottom: 20.0.h, right: 20.w, top: 20.h),
+                          bottom: 20.0.h, right: 20.w, top: 20.h, left: 20.w),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              for (int i = 0; i < numberOfLives.length; i++)
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                  width: 20.w,
+                                  height: 20.h,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: numberOfLives[i] == 1
+                                          ? const Color(0xFF3333AA)
+                                          : Colors.transparent,
+                                      border: Border.all(width: 1)),
+                                ),
+                              Expanded(
+                                child: SizedBox(
+                                  width: 1.w,
+                                ),
+                              ),
                               InkWell(
                                 onTap: () {
                                   hasGameEnded ? null : pauseGame();
@@ -507,7 +560,7 @@ class _GameScreenState extends State<GameScreen> {
                               Text(
                                 'Score: $scores',
                                 style: GoogleFonts.pressStart2p(
-                                  fontSize: 18.sp,
+                                  fontSize: 14.sp,
                                 ),
                               ),
                             ],
@@ -536,7 +589,8 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                     Visibility(
                       visible: hasGamePaused,
-                      child: Center(
+                      child: Container(
+                        alignment: const Alignment(0, -0.1),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF000088),
