@@ -817,10 +817,17 @@ class _GameScreenState extends State<GameScreen> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          setState(() {
-                                            initialLevel = initialLevel + 1;
-                                          });
-                                          nextLevel(initialLevel);
+                                          if (initialLevel != 4) {
+                                            setState(() {
+                                              initialLevel = initialLevel + 1;
+                                            });
+                                            nextLevel(initialLevel);
+                                          } else {
+                                            setState(() {
+                                              hasGameEnded = true;
+                                              endText = "No more Levels";
+                                            });
+                                          }
                                         },
                                         child: Icon(
                                           Icons.fast_forward_rounded,
