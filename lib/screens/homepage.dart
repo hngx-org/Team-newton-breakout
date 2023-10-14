@@ -1,5 +1,6 @@
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/component/settings.dart';
+import 'package:breakout_revival/screens/instuctionpage.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     checkScore();
-    // playMusic();
+    playMusic();
   }
 
   checkScore() async {
@@ -49,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
       FlameAudio.bgm.pause();
     }
   }
+
+  void stopMusic() {
+  if (FlameAudio.bgm.isPlaying) {
+    FlameAudio.bgm.stop();
+  }
+}
 
   @override
   void dispose() {
@@ -102,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : mediaQueryObject.size.height * 0.015,
                         )),
                     onPressed: () {
+                      stopMusic();
                       Navigator.of(context).pushNamed(GameScreen.route);
                     },
                     child: Icon(
@@ -131,26 +139,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: const Color(0xFF000088),
-              //     padding: EdgeInsets.symmetric(
-              //       horizontal: mediaQueryObject.size.width * 0.02,
-              //       vertical: kIsWeb
-              //           ? mediaQueryObject.size.height * 0.02
-              //           : mediaQueryObject.size.height * 0.015,
-              //     ),
-              //   ),
-              //   onPressed: () {
-              //     Navigator.of(context).pushNamed(GameScreen.route);
-              //   },
-              //   child: Icon(
-              //     Icons.play_arrow_rounded,
-              //     size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
-              //   ),
-              // ),
-              SizedBox(
+                SizedBox(
                 height: mediaQueryObject.size.width * 0.03,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF000088),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: mediaQueryObject.size.width * 0.02,
+                    vertical: kIsWeb
+                        ? mediaQueryObject.size.height * 0.02
+                        : mediaQueryObject.size.height * 0.015,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(InstructionsScreen.route);
+                },
+                child: Icon(
+                  Icons.info_outlined,
+                  size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                ),
+              ),
+              SizedBox(
+                width: mediaQueryObject.size.width * 0.03,
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -174,6 +188,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
                 ),
               ),
+              ],),
+              
               SizedBox(
                 height: mediaQueryObject.size.height * 0.02,
               ),
