@@ -191,7 +191,7 @@ class _GameScreenState extends State<GameScreen> {
         ballYdir = DIRECTION.down;
         playerX = -0.5 * (playerWidth);
         numberOfRows = 8;
-        numOfBricksPerRow = 7;
+        numOfBricksPerRow = 9;
         brickGap = 0.007;
         brickWidth = 0.2;
         brickHeight = brickHeight;
@@ -379,6 +379,9 @@ class _GameScreenState extends State<GameScreen> {
           hasGamePaused = true;
           numberOfLives[2] = 0;
         });
+        FlameAudio.play(
+          Constants.gameOverSound,
+        );
       } else {
         if (numberOfLives[1] != 0) {
           setState(() {
@@ -388,6 +391,9 @@ class _GameScreenState extends State<GameScreen> {
             ballY = 0.0;
             numberOfLives[1] = 0;
           });
+          FlameAudio.play(
+            Constants.gameOverSound,
+          );
         } else {
           if (numberOfLives[0] != 0) {
             setState(() {
@@ -397,6 +403,9 @@ class _GameScreenState extends State<GameScreen> {
               ballY = 0.0;
               numberOfLives[0] = 0;
             });
+            FlameAudio.play(
+              Constants.gameOverSound,
+            );
           }
         }
       }
@@ -588,8 +597,13 @@ class _GameScreenState extends State<GameScreen> {
     FlameAudio.audioCache.load(
       Constants.brickBreakSound,
     );
+    FlameAudio.audioCache.load(
+      Constants.audio1,
+    );
     FlameAudio.audioCache.load(Constants.gameOverSound);
     FlameAudio.audioCache.load(Constants.victorySound);
+
+    playMusic();
   }
 
   @override

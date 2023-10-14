@@ -45,7 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (FlameAudio.bgm.isPlaying) {
         FlameAudio.bgm.pause();
       } else {
-        FlameAudio.bgm.play(Constants.audio3);
+        FlameAudio.bgm.play(
+          Constants.audio3,
+        );
       }
     });
   }
@@ -115,8 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? mediaQueryObject.size.height * 0.02
                                 : mediaQueryObject.size.height * 0.015,
                           )),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(GameScreen.route);
+                      onPressed: () async {
+                        stopMusic();
+                        await Navigator.of(context).pushNamed(GameScreen.route);
+                        checkScore();
+                        stopMusic();
+                        playMusic();
                       },
                       child: Icon(
                         Icons.play_arrow_rounded,
