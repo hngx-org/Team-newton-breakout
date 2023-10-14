@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: SplashScreen.route,
             theme: ThemeData.light().copyWith(
-              scaffoldBackgroundColor: const Color(0xFF6666FF),
               primaryColor: const Color(0xFF3333AA),
               cardColor: const Color(0xFFDFF3E8),
               textTheme: TextTheme(

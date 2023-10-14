@@ -13,10 +13,14 @@ class BackGround extends StatelessWidget {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(
+          image: const AssetImage(
             Constants.bg2Path,
+          ),
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.6),
+            BlendMode.srcOver,
           ),
           fit: BoxFit.cover,
         ),

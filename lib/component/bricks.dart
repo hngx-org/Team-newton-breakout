@@ -1,3 +1,4 @@
+import 'package:breakout_revival/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class MyBrick extends StatelessWidget {
@@ -6,7 +7,7 @@ class MyBrick extends StatelessWidget {
   final double brickHeight;
   final double brickWidth;
   final bool brickBroken;
-
+  final int numberOfBricksPerRow;
   const MyBrick({
     super.key,
     required this.brickX,
@@ -14,6 +15,7 @@ class MyBrick extends StatelessWidget {
     required this.brickHeight,
     required this.brickWidth,
     required this.brickBroken,
+    required this.numberOfBricksPerRow,
   });
 
   @override
@@ -24,26 +26,19 @@ class MyBrick extends StatelessWidget {
         alignment:
             Alignment((2 * brickX + brickWidth) / (2 - brickWidth), brickY),
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(5), // Adjust this for rounded edges
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFFDD4422), Color(0xFFBB3311), Color(0xFF880000)],
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage(
+              Constants.brickPath,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black
-                    .withOpacity(0.3), // Adjust shadow color and opacity
-                blurRadius: 3, // Adjust the blur radius
-                spreadRadius: 1, // Adjust the spread radius
-                offset: const Offset(0, 2), // Adjust shadow offset
-              ),
-            ],
-          ),
-          height: MediaQuery.of(context).size.height * brickHeight / 2,
-          width: MediaQuery.of(context).size.width * brickWidth / 2,
+            fit: BoxFit.cover,
+          )),
+          height: MediaQuery.of(context).size.height *
+              brickHeight /
+              numberOfBricksPerRow,
+          width: MediaQuery.of(context).size.width *
+              brickWidth /
+              numberOfBricksPerRow,
         ),
       ),
     );

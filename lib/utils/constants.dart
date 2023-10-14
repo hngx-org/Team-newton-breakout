@@ -12,6 +12,7 @@ class Constants {
   static const String jpgPath = 'assets/jpg';
   static const String audioPath = 'assets/audio';
   static const String ballPath = '$pngPath/ball.png';
+  static const String brickPath = '$pngPath/tiles.png';
   static const String smallPlayerPath = '$pngPath/player-small.png';
   static const String bigPlayerPath = '$pngPath/player-big.png';
 
