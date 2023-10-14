@@ -9,10 +9,17 @@ enum BallState {
 
 class Constants {
   static const String pngPath = 'assets/png';
+  static const String jpgPath = 'assets/jpg';
   static const String audioPath = 'assets/audio';
   static const String ballPath = '$pngPath/ball.png';
+  static const String brickPath = '$pngPath/tiles.png';
+  static const String crackedBrickPath = '$pngPath/cracked-tiles.png';
   static const String smallPlayerPath = '$pngPath/player-small.png';
   static const String bigPlayerPath = '$pngPath/player-big.png';
+
+  static const String bg1Path = '$jpgPath/bg1.jpeg';
+  static const String bg2Path = '$jpgPath/bg2.jpeg';
+  static const String bg3Path = '$jpgPath/bg3.jpeg';
 
   static const String audio1 = 'music1.ogg';
   static const String audio2 = 'music2.ogg';
@@ -21,7 +28,7 @@ class Constants {
   static const String victorySound = 'succes.ogg';
   static const String gameOverSound = 'failure.ogg';
 
-  static const ballRadius = 10.0;
+  static const ballRadius = 8.0;
 
   static const ballColor = 0xFFFFFFFF;
 

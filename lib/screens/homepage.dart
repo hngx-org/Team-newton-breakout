@@ -1,3 +1,4 @@
+import 'package:breakout_revival/component/background.dart';
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/component/settings.dart';
 import 'package:breakout_revival/screens/instuctionpage.dart';
@@ -24,7 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    FlameAudio.audioCache.load(
+      Constants.audio3,
+    );
     checkScore();
     playMusic();
   }
@@ -38,28 +41,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void playMusic() {
-    if (FlameAudio.bgm.isPlaying) {
-      FlameAudio.bgm.pause();
-    } else {
-      FlameAudio.bgm.play(Constants.audio3);
-    }
+    setState(() {
+      if (FlameAudio.bgm.isPlaying) {
+        FlameAudio.bgm.pause();
+      } else {
+        FlameAudio.bgm.play(
+          Constants.audio3,
+        );
+      }
+    });
   }
 
   void pauseMusic() {
     if (FlameAudio.bgm.isPlaying) {
-      FlameAudio.bgm.pause();
+      setState(() {
+        FlameAudio.bgm.pause();
+      });
     }
   }
 
   void stopMusic() {
-  if (FlameAudio.bgm.isPlaying) {
-    FlameAudio.bgm.stop();
+    if (FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.stop();
+    }
   }
-}
 
   @override
   void dispose() {
-   playMusic();
+    playMusic();
     super.dispose();
   }
 
@@ -68,132 +77,144 @@ class _HomeScreenState extends State<HomeScreen> {
     final mediaQueryObject = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF6666FF),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'High Score: $_highScore',
-                style: GoogleFonts.pressStart2p(
-                  fontSize: 18.sp,
+        body: BackGround(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'High Score: $_highScore',
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: 18.sp,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: mediaQueryObject.size.height * 0.07,
-              ),
-              Text(
-                kIsWeb
-                    ? 'B R I C K - B R E A K E R'
-                    : 'B R I C K \n\nB R E A K E R',
-                style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                    color: const Color(0xFF000088),
-                    fontSize: kIsWeb
-                        ? mediaQueryObject.size.width * 0.035
-                        : mediaQueryObject.size.height * 0.025),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: mediaQueryObject.size.height * 0.07,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF000088),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: mediaQueryObject.size.width * 0.02,
-                          vertical: kIsWeb
-                              ? mediaQueryObject.size.height * 0.02
-                              : mediaQueryObject.size.height * 0.015,
-                        )),
-                    onPressed: () {
-                      stopMusic();
-                      Navigator.of(context).pushNamed(GameScreen.route);
-                    },
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
-                    ),
-                  ),
-                  SizedBox(
-                    width: mediaQueryObject.size.width * 0.03,
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF000088),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: mediaQueryObject.size.width * 0.02,
-                          vertical: kIsWeb
-                              ? mediaQueryObject.size.height * 0.02
-                              : mediaQueryObject.size.height * 0.015,
-                        )),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(SettingScreen.route);
-                    },
-                    child: Icon(
-                      Icons.settings_rounded,
-                      size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
-                    ),
-                  ),
-                ],
-              ),
                 SizedBox(
-                height: mediaQueryObject.size.width * 0.03,
-              ),
-              Row(
+                  height: mediaQueryObject.size.height * 0.07,
+                ),
+                Text(
+                  kIsWeb
+                      ? 'B R I C K - B R E A K E R'
+                      : 'B R I C K \n\nB R E A K E R',
+                  style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                      color: const Color(0xFF8cc63f),
+                      fontSize: kIsWeb
+                          ? mediaQueryObject.size.width * 0.035
+                          : mediaQueryObject.size.height * 0.025),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: mediaQueryObject.size.height * 0.07,
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF000088),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: mediaQueryObject.size.width * 0.02,
-                    vertical: kIsWeb
-                        ? mediaQueryObject.size.height * 0.02
-                        : mediaQueryObject.size.height * 0.015,
-                  ),
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF8cc63f),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: mediaQueryObject.size.width * 0.02,
+                            vertical: kIsWeb
+                                ? mediaQueryObject.size.height * 0.02
+                                : mediaQueryObject.size.height * 0.015,
+                          )),
+                      onPressed: () async {
+                        stopMusic();
+                        await Navigator.of(context).pushNamed(GameScreen.route);
+                        checkScore();
+                        stopMusic();
+                        playMusic();
+                      },
+                      child: Icon(
+                        Icons.play_arrow_rounded,
+                        size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                      ),
+                    ),
+                    SizedBox(
+                      width: mediaQueryObject.size.width * 0.03,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8cc63f),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: mediaQueryObject.size.width * 0.02,
+                          vertical: kIsWeb
+                              ? mediaQueryObject.size.height * 0.02
+                              : mediaQueryObject.size.height * 0.015,
+                        ),
+                      ),
+                      onPressed: () {
+                        // Play or pause music based on its current state
+                        Navigator.of(context).pushNamed(SettingScreen.route);
+                      },
+                      child: Icon(
+                        Icons.settings,
+                        size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                      ),
+                    ),
+                    SizedBox(
+                      width: mediaQueryObject.size.width * 0.02,
+                    ),
+                  ],
                 ),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(InstructionsScreen.route);
-                },
-                child: Icon(
-                  Icons.info_outlined,
-                  size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                SizedBox(
+                  height: mediaQueryObject.size.height * 0.03,
                 ),
-              ),
-              SizedBox(
-                width: mediaQueryObject.size.width * 0.03,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF000088),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: mediaQueryObject.size.width * 0.02,
-                    vertical: kIsWeb
-                        ? mediaQueryObject.size.height * 0.02
-                        : mediaQueryObject.size.height * 0.015,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8cc63f),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: mediaQueryObject.size.width * 0.02,
+                          vertical: kIsWeb
+                              ? mediaQueryObject.size.height * 0.02
+                              : mediaQueryObject.size.height * 0.015,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(InstructionsScreen.route);
+                      },
+                      child: Icon(
+                        Icons.info_outlined,
+                        size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                      ),
+                    ),
+                    SizedBox(
+                      width: mediaQueryObject.size.width * 0.03,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8cc63f),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: mediaQueryObject.size.width * 0.02,
+                          vertical: kIsWeb
+                              ? mediaQueryObject.size.height * 0.02
+                              : mediaQueryObject.size.height * 0.015,
+                        ),
+                      ),
+                      onPressed: () {
+                        // Play or pause music based on its current state
+                        FlameAudio.bgm.isPlaying ? pauseMusic() : playMusic();
+                      },
+                      child: Icon(
+                        FlameAudio.bgm.isPlaying
+                            ? Icons.pause_circle_filled
+                            : Icons.play_circle_filled,
+                        size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                      ),
+                    ),
+                    SizedBox(
+                      width: mediaQueryObject.size.width * 0.02,
+                    ),
+                  ],
                 ),
-                onPressed: () {
-                  // Play or pause music based on its current state
-                  FlameAudio.bgm.isPlaying ?
-                  pauseMusic() : playMusic();
-                },
-                child: Icon(
-                  FlameAudio.bgm.isPlaying
-                      ? Icons.pause_circle_filled
-                      : Icons.play_circle_filled,
-                  size: kIsWeb ? 20 : mediaQueryObject.size.height * 0.03,
+                SizedBox(
+                  height: mediaQueryObject.size.height * 0.02,
                 ),
-              ),
-              ],),
-              
-              SizedBox(
-                height: mediaQueryObject.size.height * 0.02,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

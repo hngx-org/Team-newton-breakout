@@ -1,3 +1,4 @@
+import 'package:breakout_revival/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class MyBrick extends StatelessWidget {
@@ -6,7 +7,8 @@ class MyBrick extends StatelessWidget {
   final double brickHeight;
   final double brickWidth;
   final bool brickBroken;
-
+  final bool brickCracked;
+  final int numberOfBricksPerRow;
   const MyBrick({
     super.key,
     required this.brickX,
@@ -14,6 +16,8 @@ class MyBrick extends StatelessWidget {
     required this.brickHeight,
     required this.brickWidth,
     required this.brickBroken,
+    required this.numberOfBricksPerRow,
+    required this.brickCracked,
   });
 
   @override
@@ -23,27 +27,12 @@ class MyBrick extends StatelessWidget {
       child: Container(
         alignment:
             Alignment((2 * brickX + brickWidth) / (2 - brickWidth), brickY),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(5), // Adjust this for rounded edges
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFFDD4422), Color(0xFFBB3311), Color(0xFF880000)],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black
-                    .withOpacity(0.3), // Adjust shadow color and opacity
-                blurRadius: 3, // Adjust the blur radius
-                spreadRadius: 1, // Adjust the spread radius
-                offset: const Offset(0, 2), // Adjust shadow offset
-              ),
-            ],
+        child: SizedBox(
+          height: (MediaQuery.of(context).size.height * brickHeight) / 2,
+          width: (MediaQuery.of(context).size.width * brickWidth) / 2,
+          child: Image.asset(
+            brickCracked ? Constants.crackedBrickPath : Constants.brickPath,
           ),
-          height: MediaQuery.of(context).size.height * brickHeight / 2,
-          width: MediaQuery.of(context).size.width * brickWidth / 2,
         ),
       ),
     );
