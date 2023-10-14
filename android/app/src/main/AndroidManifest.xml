@@ -2,7 +2,7 @@
 
     <uses-permission android:name="android.permission.internet"/>
     <application
-        android:label="breakout_revival"
+        android:label="Breakout Revival"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
