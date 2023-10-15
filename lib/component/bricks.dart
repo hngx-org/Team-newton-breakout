@@ -1,4 +1,3 @@
-import 'package:breakout_revival/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class MyBrick extends StatelessWidget {
@@ -9,6 +8,7 @@ class MyBrick extends StatelessWidget {
   final bool brickBroken;
   final bool brickCracked;
   final int numberOfBricksPerRow;
+  final List brick;
   const MyBrick({
     super.key,
     required this.brickX,
@@ -18,6 +18,7 @@ class MyBrick extends StatelessWidget {
     required this.brickBroken,
     required this.numberOfBricksPerRow,
     required this.brickCracked,
+    required this.brick,
   });
 
   @override
@@ -31,7 +32,7 @@ class MyBrick extends StatelessWidget {
           height: (MediaQuery.of(context).size.height * brickHeight) / 2,
           width: (MediaQuery.of(context).size.width * brickWidth) / 2,
           child: Image.asset(
-            brickCracked ? Constants.crackedBrickPath : Constants.brickPath,
+            brickCracked ? brick[1] : brick[0],
           ),
         ),
       ),
