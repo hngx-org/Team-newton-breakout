@@ -577,7 +577,7 @@ class _GameScreenState extends State<GameScreen> {
     if (FlameAudio.bgm.isPlaying) {
       FlameAudio.bgm.pause();
     } else {
-      FlameAudio.bgm.play(Constants.audio1);
+      FlameAudio.bgm.play(Constants.audio1, volume: 0.7);
     }
   }
 
