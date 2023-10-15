@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:breakout_revival/component/background.dart';
 import 'package:breakout_revival/component/ball.dart';
 import 'package:breakout_revival/component/bricks.dart';
@@ -85,9 +86,39 @@ class _GameScreenState extends State<GameScreen> {
     return bricksList;
   }
 
+  List<List<String>> brickColors = [];
+
+  generateRandomBrick() {
+    List<List<String>> bricks = [
+      [Constants.brownBrickPath, Constants.brownCrackedBrickPath],
+      [Constants.deepBlueBrickPath, Constants.deepBlueCrackedBrickPath],
+      [Constants.deepGreenBrickPath, Constants.deepGreenCrackedBrickPath],
+      [Constants.redBrickPath, Constants.redCrackedbrickPath],
+      [Constants.purpleBrickPath, Constants.purpleCrackedBrickPath],
+      [Constants.yellowBrickPath, Constants.yellowCrackedbrickPath],
+      [Constants.lightBlueBrickPath, Constants.lightBlueCrackedBrickPath],
+      [Constants.lightGreenBrickPath, Constants.lightGreenCrackedBrickPath],
+      [Constants.orangeBrickPath, Constants.orangeCrackedBrickPath],
+      [Constants.greyBrickPath, Constants.greyCrackedBrickPath],
+    ];
+    List<List<String>> colors = [];
+    // Generate a random index
+    Random random = Random();
+    for (int i = 0; i < brickList.length; i++) {
+      // Generate a random index to pick a color pair
+      int randomIndex = random.nextInt(bricks.length);
+      colors.add(bricks[randomIndex]);
+    }
+    setState(() {
+      brickColors = colors;
+    });
+  }
+
   List<Widget> generateBricks() {
     List<Widget> list = [];
+
     for (int i = 0; i < brickList.length; i++) {
+      final List<String> brick = brickColors[i];
       list.add(
         MyBrick(
           brickX: brickList[i][0],
@@ -97,6 +128,7 @@ class _GameScreenState extends State<GameScreen> {
           brickBroken: brickList[i][2],
           brickCracked: brickList[i][3],
           numberOfBricksPerRow: numOfBricksPerRow,
+          brick: brick,
         ),
       );
     }
@@ -127,6 +159,7 @@ class _GameScreenState extends State<GameScreen> {
       firstBrickX = -1 + wallGap;
       brickList = generateBrickList(
           3, 3, brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+      generateRandomBrick();
     });
   }
 
@@ -154,6 +187,7 @@ class _GameScreenState extends State<GameScreen> {
         firstBrickX = -1 + wallGap;
         brickList = generateBrickList(numberOfRows, numOfBricksPerRow,
             brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+        generateRandomBrick();
       });
     } else if (level == 3) {
       setState(() {
@@ -178,6 +212,7 @@ class _GameScreenState extends State<GameScreen> {
         firstBrickX = -1 + wallGap;
         brickList = generateBrickList(numberOfRows, numOfBricksPerRow,
             brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+        generateRandomBrick();
       });
     } else if (level == 4) {
       setState(() {
@@ -202,6 +237,7 @@ class _GameScreenState extends State<GameScreen> {
         firstBrickX = -1 + wallGap;
         brickList = generateBrickList(numberOfRows, numOfBricksPerRow,
             brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
+        generateRandomBrick();
       });
     }
   }
@@ -261,9 +297,7 @@ class _GameScreenState extends State<GameScreen> {
 
         if (isPlayerDead() || areAllBricksBroken()) {
           timer.cancel();
-          setState(() {
-            hasGameEnded = true;
-          });
+          hasGameEnded = true;
         }
       });
     });
@@ -286,56 +320,54 @@ class _GameScreenState extends State<GameScreen> {
           ballY <= brickList[i][1] + brickHeight &&
           brickList[i][2] == false &&
           ballY >= brickList[i][1]) {
-        setState(() {
-          if (initialLevel > 2) {
-            if (brickList[i][3] == false) {
-              brickList[i][3] = true;
-              brokenBrickCounter++;
-              scores = scores + brokenBrickCounter;
-            } else {
-              brickList[i][2] = true;
-              brokenBrickCounter++;
-              scores = scores + brokenBrickCounter;
-            }
+        if (initialLevel > 2) {
+          if (brickList[i][3] == false) {
+            brickList[i][3] = true;
+            brokenBrickCounter++;
+            scores = scores + brokenBrickCounter;
           } else {
             brickList[i][2] = true;
             brokenBrickCounter++;
             scores = scores + brokenBrickCounter;
           }
+        } else {
+          brickList[i][2] = true;
+          brokenBrickCounter++;
+          scores = scores + brokenBrickCounter;
+        }
 
-          // Play the "Brick Break" sound effect here
-          FlameAudio.play(
-            Constants.brickBreakSound,
-          );
+        // Play the "Brick Break" sound effect here
+        FlameAudio.play(
+          Constants.brickBreakSound,
+        );
 
-          //update ball's DIRECTION
-          //Now to do this, we must determine which side of the brick has been hit
-          // as that influences the DIRECTION in which the ball has to be reflected
+        //update ball's DIRECTION
+        //Now to do this, we must determine which side of the brick has been hit
+        // as that influences the DIRECTION in which the ball has to be reflected
 
-          //To do this, we can compute the distance of the ball from each side of the brick
-          //The shortest distance will correspond to the side of the brick that has been hit
-          double leftSideDist = (brickList[i][0] - ballX).abs();
-          double rightSideDist = (brickList[i][0] + brickWidth - ballX).abs();
-          double topSideDist = (brickList[i][1] - ballY).abs();
-          double bottomSideDist = (brickList[i][1] + brickHeight - ballY).abs();
+        //To do this, we can compute the distance of the ball from each side of the brick
+        //The shortest distance will correspond to the side of the brick that has been hit
+        double leftSideDist = (brickList[i][0] - ballX).abs();
+        double rightSideDist = (brickList[i][0] + brickWidth - ballX).abs();
+        double topSideDist = (brickList[i][1] - ballY).abs();
+        double bottomSideDist = (brickList[i][1] + brickHeight - ballY).abs();
 
-          String min = findMinDist(
-              leftSideDist, rightSideDist, topSideDist, bottomSideDist);
-          switch (min) {
-            case 'l':
-              ballXdir = DIRECTION.left;
-              break;
-            case 'r':
-              ballXdir = DIRECTION.right;
-              break;
-            case 't':
-              ballYdir = DIRECTION.up;
-              break;
-            case 'b':
-              ballYdir = DIRECTION.down;
-              break;
-          }
-        });
+        String min = findMinDist(
+            leftSideDist, rightSideDist, topSideDist, bottomSideDist);
+        switch (min) {
+          case 'l':
+            ballXdir = DIRECTION.left;
+            break;
+          case 'r':
+            ballXdir = DIRECTION.right;
+            break;
+          case 't':
+            ballYdir = DIRECTION.up;
+            break;
+          case 'b':
+            ballYdir = DIRECTION.down;
+            break;
+        }
       }
     }
   }
@@ -448,71 +480,73 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void updateBallDIRECTION() {
-    setState(() {
-      //Bouncing ball upwards once it hits player bar
-      if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.84) {
-        ballYdir = DIRECTION.up;
-        //If the ball hits the exact edges of the player bar, we show an angle in its reflection
-        if (ballX == playerX) {
-          ballXdir = DIRECTION.left;
-        } else if (ballX == playerX + playerWidth) {
-          ballXdir = DIRECTION.right;
-        }
-        // Check the player's direction and set the ball's direction accordingly
-
-        if (playerDirection == PLAYERDIRECTION.left &&
-            ballXdir == DIRECTION.right &&
-            ballYdir == DIRECTION.down) {
-          ballXdir = DIRECTION.right;
-          ballYdir = DIRECTION.up;
-        } else if (playerDirection == PLAYERDIRECTION.left &&
-            ballXdir == DIRECTION.left &&
-            ballYdir == DIRECTION.down) {
-          ballXdir = DIRECTION.left;
-          ballYdir = DIRECTION.up;
-        } else if (playerDirection == PLAYERDIRECTION.right &&
-            ballXdir == DIRECTION.right &&
-            ballYdir == DIRECTION.down) {
-          ballXdir = DIRECTION.left;
-          ballYdir = DIRECTION.up;
-        } else if (playerDirection == PLAYERDIRECTION.right &&
-            ballXdir == DIRECTION.left &&
-            ballYdir == DIRECTION.down) {
-          ballXdir = DIRECTION.left;
-          ballYdir = DIRECTION.up;
-        }
-      }
-      //Bouncing ball downwards once it hits the top of the screen
-      else if (ballY <= -1) {
-        ballYdir = DIRECTION.down;
-      }
-      //Bouncing ball right if it hits the left side of the screen
-      if (ballX <= -1) {
+    //Bouncing ball upwards once it hits player bar
+    if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.84) {
+      ballYdir = DIRECTION.up;
+      //If the ball hits the exact edges of the player bar, we show an angle in its reflection
+      if (ballX == playerX && ballXdir == DIRECTION.left) {
+        ballXdir = DIRECTION.left;
+      } else if (ballX == playerX + playerWidth &&
+          ballXdir == DIRECTION.right) {
+        ballXdir = DIRECTION.right;
+      } else if (ballX == playerX && ballXdir == DIRECTION.right) {
+        ballXdir = DIRECTION.left;
+      } else if (ballX == (playerX + playerWidth) &&
+          ballXdir == DIRECTION.left) {
         ballXdir = DIRECTION.right;
       }
-      //Bouncing ball left if it hits the right side of the screen
-      else if (ballX >= 1) {
+      // Check the player's direction and set the ball's direction accordingly
+
+      if (playerDirection == PLAYERDIRECTION.left &&
+          ballXdir == DIRECTION.right &&
+          ballYdir == DIRECTION.down) {
+        ballXdir = DIRECTION.right;
+        ballYdir = DIRECTION.up;
+      } else if (playerDirection == PLAYERDIRECTION.left &&
+          ballXdir == DIRECTION.left &&
+          ballYdir == DIRECTION.down) {
         ballXdir = DIRECTION.left;
+        ballYdir = DIRECTION.up;
+      } else if (playerDirection == PLAYERDIRECTION.right &&
+          ballXdir == DIRECTION.right &&
+          ballYdir == DIRECTION.down) {
+        ballXdir = DIRECTION.left;
+        ballYdir = DIRECTION.up;
+      } else if (playerDirection == PLAYERDIRECTION.right &&
+          ballXdir == DIRECTION.left &&
+          ballYdir == DIRECTION.down) {
+        ballXdir = DIRECTION.left;
+        ballYdir = DIRECTION.up;
       }
-    });
+    }
+    //Bouncing ball downwards once it hits the top of the screen
+    else if (ballY <= -1) {
+      ballYdir = DIRECTION.down;
+    }
+    //Bouncing ball right if it hits the left side of the screen
+    if (ballX <= -1) {
+      ballXdir = DIRECTION.right;
+    }
+    //Bouncing ball left if it hits the right side of the screen
+    else if (ballX >= 1) {
+      ballXdir = DIRECTION.left;
+    }
   }
 
   void moveBall() {
-    setState(() {
-      //Vertical Movement :
-      if (ballYdir == DIRECTION.down) {
-        ballY += ballSpeed;
-      } else if (ballYdir == DIRECTION.up) {
-        ballY -= ballSpeed;
-      }
+    //Vertical Movement :
+    if (ballYdir == DIRECTION.down) {
+      ballY += ballSpeed;
+    } else if (ballYdir == DIRECTION.up) {
+      ballY -= ballSpeed;
+    }
 
-      //Horizontal Movement :
-      if (ballXdir == DIRECTION.right) {
-        ballX += ballSpeed;
-      } else if (ballXdir == DIRECTION.left) {
-        ballX -= ballSpeed;
-      }
-    });
+    //Horizontal Movement :
+    if (ballXdir == DIRECTION.right) {
+      ballX += ballSpeed;
+    } else if (ballXdir == DIRECTION.left) {
+      ballX -= ballSpeed;
+    }
   }
 
   void movePlayer(double position) {
@@ -581,6 +615,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
+
     playerX = -0.5 * (playerWidth);
     wallGap = 0.5 *
         (2 -
@@ -592,7 +627,7 @@ class _GameScreenState extends State<GameScreen> {
     loadDetails();
     brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
         brickHeight, brickGap, firstBrickX, firstBrickY);
-
+    generateRandomBrick();
     // Load sound effects
     FlameAudio.audioCache.load(
       Constants.brickBreakSound,
@@ -634,6 +669,12 @@ class _GameScreenState extends State<GameScreen> {
               movePlayerleft();
             } else if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
               movePlayerright();
+            } else if (event.isKeyPressed(LogicalKeyboardKey.space)) {
+              if (hasGamePaused) {
+                startGame();
+              } else {
+                pauseGame();
+              }
             }
           },
           child: BackGround(
