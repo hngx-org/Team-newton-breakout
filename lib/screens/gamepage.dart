@@ -4,6 +4,7 @@ import 'package:breakout_revival/component/background.dart';
 import 'package:breakout_revival/component/ball.dart';
 import 'package:breakout_revival/component/bricks.dart';
 import 'package:breakout_revival/component/player.dart';
+import 'package:breakout_revival/providerss/game_states.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:breakout_revival/utils/constants.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameScreen extends StatefulWidget {
@@ -45,11 +47,7 @@ class _GameScreenState extends State<GameScreen> {
   DIRECTION ballYdir = DIRECTION.down;
   PLAYERDIRECTION playerDirection = PLAYERDIRECTION.stationary;
 
-  //Player variables :-
-  double playerX =
-      0; // its value is -0.5 *(playerWidth) to ensure that the player bar initially remains in the centre
-  double playerWidth = 0.4; // ( 0.4, 0.8, 1.2)
-  double playerSpeed = 0.2;
+
 
   //Brick variables :-
   double wallGap = 0;
@@ -155,7 +153,7 @@ class _GameScreenState extends State<GameScreen> {
           (2 -
               numOfBricksPerRow * brickWidth -
               (numOfBricksPerRow - 1) * brickGap);
-      playerX = -0.5 * (playerWidth);
+      context.read<GamesState>().playerX = -0.5 * (context.read<GamesState>().playerWidth);
       firstBrickX = -1 + wallGap;
       brickList = generateBrickList(
           3, 3, brickWidth, brickHeight, brickGap, firstBrickX, firstBrickY);
@@ -174,7 +172,7 @@ class _GameScreenState extends State<GameScreen> {
         brokenBrickCounter = 0;
         ballXdir = DIRECTION.left;
         ballYdir = DIRECTION.down;
-        playerX = -0.5 * (playerWidth);
+        context.read<GamesState>().playerX = -0.5 * (context.read<GamesState>().playerWidth);
         numberOfRows = 5;
         numOfBricksPerRow = 4;
         brickGap = 0.01;
@@ -199,7 +197,7 @@ class _GameScreenState extends State<GameScreen> {
         brokenBrickCounter = 0;
         ballXdir = DIRECTION.left;
         ballYdir = DIRECTION.down;
-        playerX = -0.5 * (playerWidth);
+        context.read<GamesState>().playerX = -0.5 * (context.read<GamesState>().playerWidth);
         numberOfRows = 6;
         numOfBricksPerRow = 6;
         brickGap = 0.009;
@@ -224,7 +222,7 @@ class _GameScreenState extends State<GameScreen> {
         brokenBrickCounter = 0;
         ballXdir = DIRECTION.left;
         ballYdir = DIRECTION.down;
-        playerX = -0.5 * (playerWidth);
+        context.read<GamesState>().playerX = -0.5 * (context.read<GamesState>().playerWidth);
         numberOfRows = 8;
         numOfBricksPerRow = 9;
         brickGap = 0.007;
@@ -252,30 +250,30 @@ class _GameScreenState extends State<GameScreen> {
 
   //ALL FUNCTIONS :-
 
-  void loadDetails() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      ballSpeed = prefs.getDouble('bs') ?? 1.0;
-      playerWidth = prefs.getDouble('pw') ?? 1.0;
-      if (ballSpeed == 0.5) {
-        ballSpeed = 0.010;
-      } else if (ballSpeed == 1.0) {
-        ballSpeed = 0.016;
-      } else if (ballSpeed == 1.5) {
-        ballSpeed = 0.022;
-      }
+  // void loadDetails() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     ballSpeed = prefs.getDouble('bs') ?? 1.0;
+  //     context.read<GamesState>().playerWidth = prefs.getDouble('pw') ?? 1.0;
+  //     if (ballSpeed == 0.5) {
+  //       ballSpeed = 0.010;
+  //     } else if (ballSpeed == 1.0) {
+  //       ballSpeed = 0.016;
+  //     } else if (ballSpeed == 1.5) {
+  //       ballSpeed = 0.022;
+  //     }
 
-      if (playerWidth == 0.5) {
-        playerWidth = 0.4;
-      } else if (playerWidth == 1.0) {
-        playerWidth = 0.8;
-      } else if (playerWidth == 1.5) {
-        playerWidth = 1.2;
-      }
+  //     if (context.read<GamesState>().playerWidth == 0.5) {
+  //       context.read<GamesState>().playerWidth = 0.4;
+  //     } else if (context.read<GamesState>().playerWidth == 1.0) {
+  //       context.read<GamesState>().playerWidth = 0.8;
+  //     } else if (context.read<GamesState>().playerWidth == 1.5) {
+  //       context.read<GamesState>().playerWidth = 1.2;
+  //     }
 
-      playerX = -(0.5) * playerWidth;
-    });
-  }
+  //     context.read<GamesState>().playerX = -(0.5) * context.read<GamesState>().playerWidth;
+  //   });
+  // }
 
   void startGame() {
     setState(() {
@@ -481,17 +479,17 @@ class _GameScreenState extends State<GameScreen> {
 
   void updateBallDIRECTION() {
     //Bouncing ball upwards once it hits player bar
-    if (ballX >= playerX && ballX <= playerX + playerWidth && ballY >= 0.84) {
+    if (ballX >= context.read<GamesState>().playerX && ballX <= context.read<GamesState>().playerX + context.read<GamesState>().playerWidth && ballY >= 0.84) {
       ballYdir = DIRECTION.up;
       //If the ball hits the exact edges of the player bar, we show an angle in its reflection
-      if (ballX == playerX && ballXdir == DIRECTION.left) {
+      if (ballX == context.read<GamesState>().playerX && ballXdir == DIRECTION.left) {
         ballXdir = DIRECTION.left;
-      } else if (ballX == playerX + playerWidth &&
+      } else if (ballX == context.read<GamesState>().playerX + context.read<GamesState>().playerWidth &&
           ballXdir == DIRECTION.right) {
         ballXdir = DIRECTION.right;
-      } else if (ballX == playerX && ballXdir == DIRECTION.right) {
+      } else if (ballX == context.read<GamesState>().playerX && ballXdir == DIRECTION.right) {
         ballXdir = DIRECTION.left;
-      } else if (ballX == (playerX + playerWidth) &&
+      } else if (ballX == (context.read<GamesState>().playerX + context.read<GamesState>().playerWidth) &&
           ballXdir == DIRECTION.left) {
         ballXdir = DIRECTION.right;
       }
@@ -549,29 +547,13 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  void movePlayer(double position) {
-    setState(() {
-      playerX = position;
-    });
-  }
+  // void movePlayer(double position) {
+  
+  //     context.read<GamesState>().playerX = position;
+  
+  // }
 
-  void movePlayerleft() {
-    playerDirection = PLAYERDIRECTION.left;
-    if (playerX - playerSpeed >= -1) {
-      setState(() {
-        playerX -= playerSpeed;
-      });
-    }
-  }
 
-  void movePlayerright() {
-    playerDirection = PLAYERDIRECTION.right;
-    if (playerX + playerWidth + playerSpeed <= 1) {
-      setState(() {
-        playerX += playerSpeed;
-      });
-    }
-  }
 
   playMusic() {
     if (FlameAudio.bgm.isPlaying) {
@@ -581,53 +563,13 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  void onHorizontalDragUpdate(DragUpdateDetails details) {
-    double delta = details.delta.dx * playerSpeed * playerSpeed;
-
-    // Update the state of your container's position
-    setState(() {
-      if (delta < 0) {
-        // If delta is negative, the player board is being dragged left
-        playerDirection = PLAYERDIRECTION.left;
-      } else if (delta > 0) {
-        // If delta is positive, the player board is being dragged right
-        playerDirection = PLAYERDIRECTION.right;
-      } else {
-        // If delta is zero, the player board is stationary
-        playerDirection = PLAYERDIRECTION.stationary;
-      }
-      // Add the delta multiplied by the player speed to the initial position
-      playerX += delta * playerSpeed;
-
-      // Check if the container is within the screen boundaries
-      if (playerX < -1) {
-        // If it is too far left, set it to -1
-        playerX = -1;
-      } else if (playerX + playerWidth > 1) {
-        // If it is too far right, set it to 1 - playerWidth
-        playerX = 1 - playerWidth;
-      }
-
-      // Assign the initial position to the playerX variable
-    });
-  }
+  
 
   @override
   void initState() {
     super.initState();
 
-    playerX = -0.5 * (playerWidth);
-    wallGap = 0.5 *
-        (2 -
-            numOfBricksPerRow * brickWidth -
-            (numOfBricksPerRow - 1) * brickGap);
 
-    firstBrickX = -1 + wallGap;
-
-    loadDetails();
-    brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
-        brickHeight, brickGap, firstBrickX, firstBrickY);
-    generateRandomBrick();
     // Load sound effects
     FlameAudio.audioCache.load(
       Constants.brickBreakSound,
@@ -666,9 +608,9 @@ class _GameScreenState extends State<GameScreen> {
           autofocus: true,
           onKey: (event) {
             if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-              movePlayerleft();
+              context.read<GamesState>().movePlayerleft();
             } else if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-              movePlayerright();
+              context.read<GamesState>().movePlayerright();
             } else if (event.isKeyPressed(LogicalKeyboardKey.space)) {
               if (hasGamePaused) {
                 startGame();
@@ -942,9 +884,9 @@ class _GameScreenState extends State<GameScreen> {
 
                       //PLAYER
                       MyPlayer(
-                        onHorizontalDragUpdate: onHorizontalDragUpdate,
-                        playerX: playerX,
-                        playerWidth: playerWidth,
+                        onHorizontalDragUpdate: context.read<GamesState>().onHorizontalDragUpdate,
+                        playerX: context.watch<GamesState>().playerX,
+                        playerWidth: context.watch<GamesState>().playerWidth,
                       ),
 
                       //BRICKS
