@@ -7,8 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../providers/game_state_provider.dart';
 import '../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _highScore = 0;
+  final gameState = GameState(); 
 
   @override
   void initState() {
@@ -28,53 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
     FlameAudio.audioCache.load(
       Constants.audio3,
     );
-    checkScore();
-    playMusic();
+    gameState.checkScore();
+    gameState.playMusic();
   }
 
-  checkScore() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      _highScore = prefs.getInt('high') ?? 0;
-    });
-  }
-
-  void playMusic() {
-    setState(() {
-      if (FlameAudio.bgm.isPlaying) {
-        FlameAudio.bgm.pause();
-      } else {
-        FlameAudio.bgm.play(
-          Constants.audio3,
-        );
-      }
-    });
-  }
-
-  void pauseMusic() {
-    if (FlameAudio.bgm.isPlaying) {
-      setState(() {
-        FlameAudio.bgm.pause();
-      });
-    }
-  }
-
-  void stopMusic() {
-    if (FlameAudio.bgm.isPlaying) {
-      FlameAudio.bgm.stop();
-    }
-  }
+  
 
   @override
   void dispose() {
-    playMusic();
+    gameState.playMusic();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryObject = MediaQuery.of(context);
+    
+    final gameState = Provider.of<GameState>(context);
     return SafeArea(
       child: Scaffold(
         body: BackGround(
@@ -83,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'High Score: $_highScore',
+                  'High Score: ${gameState.highScore}',
                   style: GoogleFonts.pressStart2p(
                     fontSize: 18.sp,
                   ),
@@ -118,11 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : mediaQueryObject.size.height * 0.015,
                           )),
                       onPressed: () async {
-                        stopMusic();
+                        gameState.stopMusic();
                         await Navigator.of(context).pushNamed(GameScreen.route);
-                        checkScore();
-                        stopMusic();
-                        playMusic();
+                        gameState.checkScore();
+                        gameState.stopMusic();
+                        gameState.playMusic();
                       },
                       child: Icon(
                         Icons.play_arrow_rounded,
@@ -196,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       onPressed: () {
                         // Play or pause music based on its current state
-                        FlameAudio.bgm.isPlaying ? pauseMusic() : playMusic();
+                        FlameAudio.bgm.isPlaying ? gameState.pauseMusic() : gameState.playMusic();
                       },
                       child: Icon(
                         FlameAudio.bgm.isPlaying
