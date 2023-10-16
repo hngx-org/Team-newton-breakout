@@ -55,7 +55,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 ], // Set a custom text color
               ),
               SizedBox(
-                height: 20.h,
+                height: 10.h,
               ), // Add spacing between buttons
               Stack(
                 alignment: Alignment.center,
