@@ -74,6 +74,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       });
                       // Handle Sign In button click
                     },
+
                     // Set a custom background color
                     textColor: Colors.white,
                     isPressed: isPressed[1],
@@ -81,7 +82,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       Constants.deepGreenBrickPath,
                       Constants.deepGreenCrackedBrickPath,
                     ], // Set a custom text color
-                  )
+                  ),
                 ],
               ),
             ],

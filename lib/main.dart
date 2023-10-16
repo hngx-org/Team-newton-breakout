@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:breakout_revival/screens/levels.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
               SettingScreen.route: (context) => const SettingScreen(),
               InstructionsScreen.route: (context) => const InstructionsScreen(),
               AuthScreen.route: (context) => const AuthScreen(),
+              LevelScreen.route: (context) => const LevelScreen(),
             },
           );
         });
