@@ -73,7 +73,6 @@ class GameState extends ChangeNotifier {
         double y = brickY + row * (brickHeight + brickGap);
         bricksList.add([x, y, false]);
       }
-      notifyListeners();
     }
     notifyListeners();
     return bricksList;
@@ -81,7 +80,7 @@ class GameState extends ChangeNotifier {
 
   /// generate bricks
   List<Widget> generateBricks() {
-    notifyListeners();
+    print('list');
     List<Widget> list = [];
 
     for (int i = 0; i < brickList.length; i++) {
@@ -99,6 +98,7 @@ class GameState extends ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
     return list;
   }
 
@@ -191,7 +191,6 @@ class GameState extends ChangeNotifier {
       brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
           brickHeight, brickGap, firstBrickX, firstBrickY);
       generateRandomBrick();
-      notifyListeners();
     } else if (level == 3) {
       hasGameEnded = false;
       hasGameStarted = false;
@@ -215,7 +214,6 @@ class GameState extends ChangeNotifier {
       brickList = generateBrickList(numberOfRows, numOfBricksPerRow, brickWidth,
           brickHeight, brickGap, firstBrickX, firstBrickY);
       generateRandomBrick();
-      notifyListeners();
     } else if (level == 4) {
       hasGameEnded = false;
       hasGameStarted = false;
@@ -241,6 +239,33 @@ class GameState extends ChangeNotifier {
       generateRandomBrick();
     }
     notifyListeners();
+  }
+
+  /// initialise game
+  void initializeGame() {
+    // Initialize the initial state in your gameState object
+    playerX = -0.5 * (playerWidth);
+    wallGap = 0.5 *
+        (2 -
+            numOfBricksPerRow * brickWidth -
+            (numOfBricksPerRow - 1) * brickGap);
+
+    firstBrickX = -1 + wallGap;
+
+    // Load user details and update the gameState object
+    // gameState.loadDetails();
+
+    brickList = generateBrickList(
+      numberOfRows,
+      numOfBricksPerRow,
+      brickWidth,
+      brickHeight,
+      brickGap,
+      firstBrickX,
+      firstBrickY,
+    );
+
+   notifyListeners();
   }
 
   /// load game details
@@ -354,38 +379,44 @@ class GameState extends ChangeNotifier {
 
   /// find the minimum distance
   String findMinDist(double l, double r, double t, double b) {
-    notifyListeners();
+    
     double mini = l;
     if (mini > r) mini = r;
     if (mini > t) mini = t;
     if (mini > b) mini = b;
 
     if ((mini - l).abs() < 0.01) {
+      notifyListeners();
       return 'l';
     } else if ((mini - r).abs() < 0.01) {
+      notifyListeners();
       return 'r';
     } else if ((mini - t).abs() < 0.01) {
+      notifyListeners();
       return 't';
     } else if ((mini - b).abs() < 0.01) {
+      notifyListeners();
       return 'b';
     }
-
+    notifyListeners();
     return '';
   }
 
   /// check if the player has failed
   bool isPlayerDead() {
-    notifyListeners();
     if (ballY > 0.94) {
       saveScores();
       FlameAudio.play(
         Constants.gameOverSound,
       );
       endText = 'GAME OVER!';
+      notifyListeners();
       return true;
     }
+    notifyListeners();
     return false;
   }
+
 
   checkScore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -432,16 +463,16 @@ class GameState extends ChangeNotifier {
 
   /// check to see if all the bricks have been broken
   bool areAllBricksBroken() {
-    notifyListeners();
     if (brokenBrickCounter == brickList.length) {
       FlameAudio.play(
         Constants.victorySound,
       );
 
       endText = 'YOU WON!';
-
+      notifyListeners();
       return true;
     }
+    notifyListeners();
     return false;
   }
 
