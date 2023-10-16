@@ -8,7 +8,6 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:games_services/games_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,12 +39,12 @@ class MyApp extends StatelessWidget {
                   )),
             ),
             routes: {
-              SplashScreen.route: (context) => AuthScreen(),
+              SplashScreen.route: (context) => const SplashScreen(),
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
               InstructionsScreen.route: (context) => const InstructionsScreen(),
-              AuthScreen.route: (context) => AuthScreen(),
+              AuthScreen.route: (context) => const AuthScreen(),
             },
           );
         });
