@@ -27,12 +27,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: SplashScreen.route,
             theme: ThemeData.light().copyWith(
-              scaffoldBackgroundColor: const Color(0xFF6666FF),
-              primaryColor: const Color(0xFF3333AA),
+              primaryColor: const Color(0xFF8cc63f),
               cardColor: const Color(0xFFDFF3E8),
               textTheme: TextTheme(
                   displayLarge: GoogleFonts.pressStart2p(
-                    color: const Color(0xFF000088),
+                    color: const Color(0xFF8cc63f),
                   ),
                   displayMedium: GoogleFonts.pressStart2p(
                     color: const Color(0xFFDFF3E8),
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
-              InstructionsScreen.route:(context) => InstructionsScreen()
+              InstructionsScreen.route: (context) => const InstructionsScreen()
             },
           );
         });

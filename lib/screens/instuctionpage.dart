@@ -1,5 +1,7 @@
+import 'package:breakout_revival/component/background.dart';
 import 'package:flutter/material.dart';
-import 'package:breakout_revival/utils/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class InstructionsScreen extends StatelessWidget {
   static const route = '/instructions';
@@ -9,31 +11,91 @@ class InstructionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xFF6666FF),
-        title: const Text('Instructions'),
-      ),
-      body: const Center(
+      body: BackGround(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'How to Play:',
-              style: TextStyle(fontSize: 24),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      height: 50.h,
+                      width: 50.w,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFF8cc63f),
+                          borderRadius: BorderRadius.circular(20.r)),
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 20),
-            Text(
-              '1. Move the paddle left and right to bounce the ball.',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              '2. Break all the bricks to win the game.',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              '3. Don\'t let the ball fall off the screen.',
-              style: TextStyle(fontSize: 16),
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 20.h,
+                        ),
+                        width: MediaQuery.sizeOf(context).width,
+                        height: MediaQuery.sizeOf(context).height * 0.4,
+                        decoration: BoxDecoration(
+                            color: const Color(0xFF8cc63f).withOpacity(.2),
+                            borderRadius: BorderRadius.circular(25.r)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'How to Play:',
+                              style: GoogleFonts.pressStart2p(
+                                fontSize: 24.sp,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Text(
+                              '1. Move the paddle left and right to bounce the ball.',
+                              style: GoogleFonts.pressStart2p(
+                                fontSize: 14.sp,
+                                height: 1.5.h,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Text(
+                              '2. Break all the bricks to win the game.',
+                              style: GoogleFonts.pressStart2p(
+                                fontSize: 14.sp,
+                                height: 1.5.h,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Text(
+                              '3. Don\'t let the ball fall off the screen.',
+                              style: GoogleFonts.pressStart2p(
+                                fontSize: 14.sp,
+                                height: 1.5.h,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
