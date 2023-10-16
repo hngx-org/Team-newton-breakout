@@ -1,3 +1,4 @@
+import 'package:breakout_revival/screens/auth.dart';
 import 'package:breakout_revival/providers/game_state_provider.dart';
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/screens/homepage.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:games_services/games_services.dart';
+import 'package:breakout_revival/screens/levels.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,11 +45,13 @@ class MyApp extends StatelessWidget {
                   )),
             ),
             routes: {
-              SplashScreen.route: (context) => const SplashScreen(),
+              SplashScreen.route: (context) => const LevelScreen(),
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
-              InstructionsScreen.route: (context) => const InstructionsScreen()
+              InstructionsScreen.route: (context) => const InstructionsScreen(),
+              AuthScreen.route: (context) => const AuthScreen(),
+              LevelScreen.route: (context) => const LevelScreen(),
             },
           );
         });
