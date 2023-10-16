@@ -1,3 +1,4 @@
+import 'package:breakout_revival/screens/auth.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
     _controller = FlameSplashController();
+    checkIfSignedIn();
   }
 
   @override
@@ -28,12 +31,14 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  checkIfSignedIn() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FlameSplashScreen(
         onFinish: (context) =>
-            Navigator.of(context).pushNamed(HomeScreen.route),
+            Navigator.of(context).pushNamed(AuthScreen.route),
         theme: FlameSplashTheme.dark,
         showBefore: (context) => SizedBox(
           width: double.infinity,

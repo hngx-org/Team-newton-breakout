@@ -8,7 +8,6 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:games_services/games_services.dart';
 import 'package:breakout_revival/screens/levels.dart';
 
 void main() async {
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
                   )),
             ),
             routes: {
-              SplashScreen.route: (context) => const LevelScreen(),
+              SplashScreen.route: (context) => const SplashScreen(),
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
