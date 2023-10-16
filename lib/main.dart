@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
                   )),
             ),
             routes: {
-              SplashScreen.route: (context) => const LevelScreen(),
+              SplashScreen.route: (context) => const SplashScreen(),
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
