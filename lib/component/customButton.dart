@@ -20,14 +20,9 @@ class CustomButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
       ),
-      child: Ink.image(
-        image: AssetImage(imagePath),
-        child: InkWell(
-          child: Text(
-            label,
-            style: TextStyle(color: textColor),
-          ),
-        ),
+      child: Text(
+        label,
+        style: TextStyle(color: textColor),
       ),
     );
   }
