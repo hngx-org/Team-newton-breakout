@@ -1,3 +1,4 @@
+import 'package:breakout_revival/screens/auth.dart';
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:breakout_revival/component/settings.dart';
@@ -39,11 +40,12 @@ class MyApp extends StatelessWidget {
                   )),
             ),
             routes: {
-              SplashScreen.route: (context) => const SplashScreen(),
+              SplashScreen.route: (context) => AuthScreen(),
               HomeScreen.route: (context) => const HomeScreen(),
               GameScreen.route: (context) => const GameScreen(),
               SettingScreen.route: (context) => const SettingScreen(),
-              InstructionsScreen.route: (context) => const InstructionsScreen()
+              InstructionsScreen.route: (context) => const InstructionsScreen(),
+              AuthScreen.route: (context) => AuthScreen(),
             },
           );
         });
