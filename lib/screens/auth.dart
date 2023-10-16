@@ -8,6 +8,8 @@ import 'package:breakout_revival/component/customButton.dart';
 class AuthScreen extends StatelessWidget {
   static const route = '/auth';
 
+  const AuthScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +35,7 @@ class AuthScreen extends StatelessWidget {
                     onPressed: () {
                       // Handle Sign In button click
                     },
-                    backgroundColor: 
+                    backgroundColor:
                         Colors.brown, // Set a custom background color
                     textColor: Colors.white, // Set a custom text color
                   )
