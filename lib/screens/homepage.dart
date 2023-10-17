@@ -157,21 +157,47 @@ class _HomeScreenState extends State<HomeScreen> {
                   CustomButton(
                     onPressed: () async {
                       setState(() {
-                        isPressed[4] = true;
+                        isPressed[3] = true;
                       });
                       playAudio();
                       // Play or pause music based on its current state
                       await navigateToScreen(LevelScreen.route);
                       setState(() {
-                        isPressed[4] = false;
+                        isPressed[3] = false;
                       });
                     },
-                    icon: Icons.leaderboard,
+                    icon: Icons.list,
                     label: 'Levels',
                     isPressed: isPressed[4],
                     images: const [
                       Constants.deepGreenBrickPath,
                       Constants.deepGreenCrackedBrickPath,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  CustomButton(
+                    onPressed: () async {
+                      setState(() {
+                        isPressed[4] = true;
+                      });
+                      playAudio();
+                      // Play or pause music based on its current state
+                      // await navigateToScreen(LevelScreen.route);
+                      setState(() {
+                        isPressed[4] = false;
+                      });
+                    },
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                    ),
+                    icon: Icons.leaderboard,
+                    label: 'Leaderboard',
+                    isPressed: isPressed[4],
+                    images: const [
+                      Constants.deepBlueBrickPath,
+                      Constants.deepBlueCrackedBrickPath,
                     ],
                   ),
                   SizedBox(
