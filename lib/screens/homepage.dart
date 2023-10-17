@@ -3,6 +3,7 @@ import 'package:breakout_revival/component/custom_button.dart';
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/component/settings.dart';
 import 'package:breakout_revival/screens/instuctionpage.dart';
+import 'package:breakout_revival/screens/levels.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _highScore = 0;
   List<bool> isPressed = [
+    false,
     false,
     false,
     false,
@@ -113,8 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Text(
                     kIsWeb
-                        ? 'B R I C K - B R E A K E R'
-                        : 'B R I C K \n\nB R E A K E R',
+                        ? 'B R E A K O U T - R E V I V A L'
+                        : 'B R E A K O U T\n\nR E V I V A L',
                     style: Theme.of(context).textTheme.displayLarge!.copyWith(
                         color: const Color(0xFF8cc63f),
                         fontSize: kIsWeb
@@ -148,6 +150,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       Constants.lightBlueCrackedBrickPath
                     ],
                     icon: Icons.play_arrow_rounded,
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  CustomButton(
+                    onPressed: () async {
+                      setState(() {
+                        isPressed[4] = true;
+                      });
+                      playAudio();
+                      // Play or pause music based on its current state
+                      await navigateToScreen(LevelScreen.route);
+                      setState(() {
+                        isPressed[4] = false;
+                      });
+                    },
+                    icon: Icons.leaderboard,
+                    label: 'Levels',
+                    isPressed: isPressed[4],
+                    images: const [
+                      Constants.deepGreenBrickPath,
+                      Constants.deepGreenCrackedBrickPath,
+                    ],
                   ),
                   SizedBox(
                     height: 5.h,
