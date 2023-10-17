@@ -1,4 +1,3 @@
-import 'package:breakout_revival/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +8,8 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final bool isPressed;
   final List<String> images;
+  final IconData? icon;
+  final EdgeInsetsGeometry? padding;
 
   const CustomButton({
     super.key,
@@ -16,7 +17,9 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.textColor = Colors.white,
     required this.isPressed,
-    required this.images, // Default text color
+    required this.images,
+    this.icon,
+    this.padding, // Default text color
   });
 
   @override
@@ -24,6 +27,7 @@ class CustomButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
+        padding: padding,
         alignment: Alignment.center,
         width: 200.w,
         height: 100.h,
@@ -34,20 +38,28 @@ class CustomButton extends StatelessWidget {
             ),
           ),
         ),
-        child: Ink.image(
-          image: const AssetImage(Constants.deepBlueBrickPath),
-          child: InkWell(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                label,
-                style: GoogleFonts.pressStart2p(
-                  color: textColor,
-                  fontSize: 14.sp,
+        child: InkWell(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.white,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.clip,
-              ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Text(
+                  label,
+                  style: GoogleFonts.pressStart2p(
+                    color: textColor,
+                    fontSize: 14.sp,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                ),
+              ],
             ),
           ),
         ),

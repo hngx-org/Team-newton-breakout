@@ -4,7 +4,6 @@ import 'package:breakout_revival/component/background.dart';
 import 'package:breakout_revival/utils/constants.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:breakout_revival/component/custom_button.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -33,12 +32,13 @@ class _AuthScreenState extends State<AuthScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomButton(
+                icon: Icons.login_outlined,
                 label: "Sign In",
                 onPressed: () async {
                   setState(() {
                     isPressed[0] = true;
                   });
-                  await FlameAudio.bgm.play(Constants.brickBreakSound);
+                  await playAudio();
 
                   await navigateToHome();
                   setState(() {
@@ -61,12 +61,14 @@ class _AuthScreenState extends State<AuthScreen> {
                 alignment: Alignment.center,
                 children: [
                   CustomButton(
+                    icon: Icons.person_2_outlined,
                     label: "Guest",
                     onPressed: () async {
                       setState(() {
                         isPressed[1] = true;
                       });
-                      await FlameAudio.bgm.play(Constants.brickBreakSound);
+                      await playAudio();
+
                       await navigateToHome();
 
                       setState(() {
@@ -92,7 +94,13 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
+  playAudio() async {
+    FlameAudio.play(Constants.brickBreakSound);
+  }
+
   navigateToHome() async {
-    await Navigator.of(context).pushNamed(HomeScreen.route);
+    await Future.delayed(const Duration(milliseconds: 1200), () async {
+      await Navigator.of(context).pushNamed(HomeScreen.route);
+    });
   }
 }
