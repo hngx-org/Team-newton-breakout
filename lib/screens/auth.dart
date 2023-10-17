@@ -1,3 +1,4 @@
+import 'package:breakout_revival/utils/game_services/game_service.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:breakout_revival/component/background.dart';
@@ -16,6 +17,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final GameService gameService = GameService();
   List<bool> isPressed = [false, false];
   @override
   void initState() {
@@ -39,8 +41,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     isPressed[0] = true;
                   });
                   await playAudio();
-
-                  await navigateToHome();
+                  final login = await gameService.signIn();
+                  print("$login");
+                  // await navigateToHome();
                   setState(() {
                     isPressed[0] = false;
                   });

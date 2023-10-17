@@ -1,9 +1,11 @@
+import 'package:breakout_revival/firebase_options.dart';
 import 'package:breakout_revival/screens/auth.dart';
 import 'package:breakout_revival/screens/gamepage.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:breakout_revival/component/settings.dart';
 import 'package:breakout_revival/screens/instuctionpage.dart';
 import 'package:breakout_revival/screens/splash_screen/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +14,10 @@ import 'package:breakout_revival/screens/levels.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   Flame.device.fullScreen();
   runApp(const MyApp());
 }

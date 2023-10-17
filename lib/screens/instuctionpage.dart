@@ -22,14 +22,16 @@ class InstructionsScreen extends StatelessWidget {
                   InkWell(
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      height: 50.h,
-                      width: 50.w,
+                      alignment: Alignment.center,
+                      height: 35.h,
+                      width: 35.w,
                       decoration: BoxDecoration(
                           color: const Color(0xFF8cc63f),
-                          borderRadius: BorderRadius.circular(20.r)),
-                      child: const Icon(
+                          borderRadius: BorderRadius.circular(10.r)),
+                      child: Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,
+                        size: 16.sp,
                       ),
                     ),
                   ),

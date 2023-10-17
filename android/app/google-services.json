@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "85478361501",
+    "project_id": "breakout-revival",
+    "storage_bucket": "breakout-revival.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85478361501:android:385935c02605c06f148774",
+        "android_client_info": {
+          "package_name": "com.example.breakout_revival"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvXSuswE9ixrZD1c4ahGi0gZsHWv5RRq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

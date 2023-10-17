@@ -42,6 +42,7 @@ dependencies:
   flame_audio: ^2.1.1
   flame_splash_screen: ^0.2.0
   games_services: ^3.0.3
+  firebase_core: ^2.17.0
 
 dev_dependencies:
   flutter_test:
