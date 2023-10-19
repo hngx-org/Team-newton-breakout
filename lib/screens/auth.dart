@@ -42,7 +42,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   });
                   await playAudio();
                   final login = await gameService.signIn();
-                  print("$login");
+                  print("$login ok");
                   // await navigateToHome();
                   setState(() {
                     isPressed[0] = false;

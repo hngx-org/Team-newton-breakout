@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     icon: Icons.list,
                     label: 'Levels',
-                    isPressed: isPressed[4],
+                    isPressed: isPressed[3],
                     images: const [
                       Constants.deepGreenBrickPath,
                       Constants.deepGreenCrackedBrickPath,
