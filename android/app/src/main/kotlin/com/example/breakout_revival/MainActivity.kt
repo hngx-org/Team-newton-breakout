@@ -1,4 +1,4 @@
-package com.example.breakout_revival
+package com.mavipop.breakout_revival
 
 import io.flutter.embedding.android.FlutterActivity
 

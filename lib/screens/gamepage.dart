@@ -14,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/game_services/game_service.dart';
+
 class GameScreen extends StatefulWidget {
   static const route = '/game';
 
@@ -37,6 +39,7 @@ enum PLAYERDIRECTION {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  final GameService gameService = GameService();
   //Ball variables :-
   double ballX = 0.0;
   double ballY = 0.0;
@@ -451,6 +454,7 @@ class _GameScreenState extends State<GameScreen> {
     if (getScore < scores) {
       await prefs.setInt('high', scores);
     }
+    await gameService.submitScore(scores);
   }
 
   bool areAllBricksBroken() {
@@ -475,7 +479,7 @@ class _GameScreenState extends State<GameScreen> {
         return true;
       }
     }
-
+    saveScores();
     return false;
   }
 
