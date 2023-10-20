@@ -8,7 +8,9 @@ class MyBrick extends StatelessWidget {
   final bool brickBroken;
   final bool brickCracked;
   final int numberOfBricksPerRow;
-  final List brick;
+  final List<String> brick;
+  final String particleEffectAsset; // Add this for the particle effect GIF
+
   const MyBrick({
     super.key,
     required this.brickX,
@@ -19,23 +21,46 @@ class MyBrick extends StatelessWidget {
     required this.numberOfBricksPerRow,
     required this.brickCracked,
     required this.brick,
+    required this.particleEffectAsset,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: brickBroken ? 0.0 : 1.0,
-      child: Container(
-        alignment:
-            Alignment((2 * brickX + brickWidth) / (2 - brickWidth), brickY),
-        child: SizedBox(
-          height: (MediaQuery.of(context).size.height * brickHeight) / 2,
-          width: (MediaQuery.of(context).size.width * brickWidth) / 2,
-          child: Image.asset(
-            brickCracked ? brick[1] : brick[0],
+    return Stack(
+      children: [
+        Visibility(
+          visible: !brickBroken,
+          child: Container(
+            alignment: Alignment(
+              (2 * brickX + brickWidth) / (2 - brickWidth),
+              brickY,
+            ),
+            child: SizedBox(
+              height: (MediaQuery.of(context).size.height * brickHeight) / 2,
+              width: (MediaQuery.of(context).size.width * brickWidth) / 2,
+              child: Image.asset(
+                brickCracked ? brick[1] : brick[0],
+              ),
+            ),
           ),
         ),
-      ),
+        Visibility(
+          visible: brickBroken,
+          child: Container(
+            alignment: Alignment(
+              (2 * brickX + brickWidth) / (2 - brickWidth),
+              brickY,
+            ),
+            child: SizedBox(
+              height: (MediaQuery.of(context).size.height * brickHeight) / 2,
+              width: (MediaQuery.of(context).size.width * brickWidth) / 2,
+              child: Image.asset(
+                particleEffectAsset, // Use the particle effect GIF asset
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
