@@ -9,6 +9,7 @@ class MyBrick extends StatelessWidget {
   final bool brickCracked;
   final int numberOfBricksPerRow;
   final List brick;
+  final bool hasPowerUp;
   const MyBrick({
     super.key,
     required this.brickX,
@@ -19,6 +20,7 @@ class MyBrick extends StatelessWidget {
     required this.numberOfBricksPerRow,
     required this.brickCracked,
     required this.brick,
+    required this.hasPowerUp,
   });
 
   @override

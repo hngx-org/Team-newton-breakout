@@ -132,6 +132,7 @@ class _GameScreenState extends State<GameScreen> {
           brickCracked: brickList[i][3],
           numberOfBricksPerRow: numOfBricksPerRow,
           brick: brick,
+          hasPowerUp: false,
         ),
       );
     }

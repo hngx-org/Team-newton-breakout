@@ -63,11 +63,12 @@ class _AuthScreenState extends State<AuthScreen> {
                       // Once signed in, return the UserCredential
 
                       await _auth.signInWithCredential(credential);
+                      await navigateToHome();
+                    } else {
+                      showSnack();
                     }
-
-                    await navigateToHome();
-                  } on Exception catch (e) {
-                    print(e.toString());
+                  } on Exception {
+                    showSnack();
                   }
 
                   setState(() {
@@ -120,6 +121,13 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  showSnack() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('Error signing in. Sign in as Guest instead')),
     );
   }
 
