@@ -128,7 +128,7 @@ class _GameScreenState extends State<GameScreen> {
           brickBroken: brickList[i][2],
           brickCracked: brickList[i][3],
           numberOfBricksPerRow: numOfBricksPerRow,
-          brick: brick,
+          brick: brick, particleEffectAsset: '',
         ),
       );
     }
