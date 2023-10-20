@@ -5,9 +5,15 @@ class MyPlayer extends StatelessWidget {
   final double? playerX;
   final double? playerWidth; //out of 2
   final void Function(DragUpdateDetails)? onHorizontalDragUpdate;
+  final bool hasPowerUp;
 
-  const MyPlayer(
-      {super.key, this.playerX, this.playerWidth, this.onHorizontalDragUpdate});
+  const MyPlayer({
+    super.key,
+    this.playerX,
+    this.playerWidth,
+    this.onHorizontalDragUpdate,
+    required this.hasPowerUp,
+  });
 
   @override
   Widget build(BuildContext context) {

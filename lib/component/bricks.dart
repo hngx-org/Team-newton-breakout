@@ -12,6 +12,7 @@ class MyBrick extends StatefulWidget {
   final int numberOfBricksPerRow;
   final bool hasPowerUp;
   final List<String> brick;
+  final String? powerUpType;
 
   const MyBrick({
     super.key,
@@ -24,6 +25,7 @@ class MyBrick extends StatefulWidget {
     required this.brickCracked,
     required this.brick,
     required this.hasPowerUp,
+    this.powerUpType,
   });
 
   @override
