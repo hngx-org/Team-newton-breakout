@@ -19,7 +19,7 @@ class CustomButton extends StatelessWidget {
     required this.isPressed,
     required this.images,
     this.icon,
-    this.padding, // Default text color
+    this.padding, // Default text color3
   });
 
   @override
