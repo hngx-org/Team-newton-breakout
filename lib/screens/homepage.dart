@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/constants.dart';
+import '../utils/game_services/game_service.dart';
 
 class HomeScreen extends StatefulWidget {
   static const route = '/home-screen';
@@ -22,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GameService gameService = GameService();
   int _highScore = 0;
   List<bool> isPressed = [
     false,
@@ -168,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     icon: Icons.list,
                     label: 'Levels',
-                    isPressed: isPressed[4],
+                    isPressed: isPressed[3],
                     images: const [
                       Constants.deepGreenBrickPath,
                       Constants.deepGreenCrackedBrickPath,
@@ -183,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         isPressed[4] = true;
                       });
                       playAudio();
+                      await gameService.showLeaderboards();
                       // Play or pause music based on its current state
                       // await navigateToScreen(LevelScreen.route);
                       setState(() {
