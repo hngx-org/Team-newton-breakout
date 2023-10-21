@@ -44,38 +44,42 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAp90lgO9yYGGKluswEboXBrPWuQE4Nyfg',
-    appId: '1:85478361501:web:d0b510e361549015148774',
-    messagingSenderId: '85478361501',
-    projectId: 'breakout-revival',
-    authDomain: 'breakout-revival.firebaseapp.com',
-    storageBucket: 'breakout-revival.appspot.com',
-    measurementId: 'G-KSBW0SSWNF',
+    apiKey: 'AIzaSyByyCHj-fCJxdRBJg6jjUluS34itjE6obQ',
+    appId: '1:471764593183:web:ed37d9964318da31c0c32a',
+    messagingSenderId: '471764593183',
+    projectId: 'breakout-revival-402311',
+    authDomain: 'breakout-revival-402311.firebaseapp.com',
+    storageBucket: 'breakout-revival-402311.appspot.com',
+    measurementId: 'G-LVCFXNYNX9',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCvXSuswE9ixrZD1c4ahGi0gZsHWv5RRq8',
-    appId: '1:85478361501:android:385935c02605c06f148774',
-    messagingSenderId: '85478361501',
-    projectId: 'breakout-revival',
-    storageBucket: 'breakout-revival.appspot.com',
+    apiKey: 'AIzaSyAxEYvndc1jSq3_UPyrmgruu_Tl5MQ6NeA',
+    appId: '1:471764593183:android:ac2b8be771e836d4c0c32a',
+    messagingSenderId: '471764593183',
+    projectId: 'breakout-revival-402311',
+    storageBucket: 'breakout-revival-402311.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCViD1nZuXrLqHthEMiiR0i-14AA22iUNM',
-    appId: '1:85478361501:ios:cca8264b6de8dbad148774',
-    messagingSenderId: '85478361501',
-    projectId: 'breakout-revival',
-    storageBucket: 'breakout-revival.appspot.com',
+    apiKey: 'AIzaSyA6_xITNm4G2ZyXn6CvqnPpnjI7s-QkyI4',
+    appId: '1:471764593183:ios:026efcb8bceaf910c0c32a',
+    messagingSenderId: '471764593183',
+    projectId: 'breakout-revival-402311',
+    storageBucket: 'breakout-revival-402311.appspot.com',
+    androidClientId: '471764593183-2dtbt71jscuoc172jp9nb2dio8vv071n.apps.googleusercontent.com',
+    iosClientId: '471764593183-i2736ngsube0831dihhn83p6tp12je8p.apps.googleusercontent.com',
     iosBundleId: 'com.example.breakoutRevival',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCViD1nZuXrLqHthEMiiR0i-14AA22iUNM',
-    appId: '1:85478361501:ios:fb4bba7b24d08fe4148774',
-    messagingSenderId: '85478361501',
-    projectId: 'breakout-revival',
-    storageBucket: 'breakout-revival.appspot.com',
+    apiKey: 'AIzaSyA6_xITNm4G2ZyXn6CvqnPpnjI7s-QkyI4',
+    appId: '1:471764593183:ios:8744075cfbd1d420c0c32a',
+    messagingSenderId: '471764593183',
+    projectId: 'breakout-revival-402311',
+    storageBucket: 'breakout-revival-402311.appspot.com',
+    androidClientId: '471764593183-2dtbt71jscuoc172jp9nb2dio8vv071n.apps.googleusercontent.com',
+    iosClientId: '471764593183-la3gsftukdojb27c344uvf3mi694okii.apps.googleusercontent.com',
     iosBundleId: 'com.example.breakoutRevival.RunnerTests',
   );
 }
