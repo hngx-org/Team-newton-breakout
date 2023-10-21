@@ -1,4 +1,5 @@
 import 'package:breakout_revival/utils/game_services/game_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:breakout_revival/component/background.dart';
@@ -6,6 +7,7 @@ import 'package:breakout_revival/utils/constants.dart';
 import 'package:breakout_revival/screens/homepage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:breakout_revival/component/custom_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthScreen extends StatefulWidget {
   static const route = '/auth';
@@ -17,6 +19,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GameService gameService = GameService();
   List<bool> isPressed = [false, false];
   @override
@@ -41,9 +44,33 @@ class _AuthScreenState extends State<AuthScreen> {
                     isPressed[0] = true;
                   });
                   await playAudio();
-                  final login = await gameService.signIn();
-                  print("$login");
-                  // await navigateToHome();
+
+                  try {
+                    // final logins = await gameService.signIn();
+                    final googleUser =
+                        await GoogleSignIn(signInOption: SignInOption.standard)
+                            .signIn();
+
+                    final googleAuth = await googleUser?.authentication;
+
+                    if (googleAuth != null) {
+                      // Create a new credential
+                      final credential = GoogleAuthProvider.credential(
+                        accessToken: googleAuth.accessToken,
+                        idToken: googleAuth.idToken,
+                      );
+
+                      // Once signed in, return the UserCredential
+
+                      await _auth.signInWithCredential(credential);
+                      await navigateToHome();
+                    } else {
+                      showSnack();
+                    }
+                  } on Exception {
+                    showSnack();
+                  }
+
                   setState(() {
                     isPressed[0] = false;
                   });
@@ -94,6 +121,13 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  showSnack() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('Error signing in. Sign in as Guest instead')),
     );
   }
 

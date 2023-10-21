@@ -14,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/game_services/game_service.dart';
+
 class GameScreen extends StatefulWidget {
   static const route = '/game';
 
@@ -37,6 +39,7 @@ enum PLAYERDIRECTION {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  final GameService gameService = GameService();
   //Ball variables :-
   double ballX = 0.0;
   double ballY = 0.0;
@@ -62,6 +65,7 @@ class _GameScreenState extends State<GameScreen> {
   int initialLevel = 1;
   int numberOfRows = 4;
   List numberOfLives = [1, 1, 1];
+  bool playerHasPowerUp = false;
 
   List<List<dynamic>> brickList = [];
   late Timer timer;
@@ -79,7 +83,7 @@ class _GameScreenState extends State<GameScreen> {
       for (int col = 0; col < bricksPerRow; col++) {
         double x = brickX + col * (brickWidth + brickGap);
         double y = brickY + row * (brickHeight + brickGap);
-        bricksList.add([x, y, false, false]);
+        bricksList.add([x, y, false, false, false]);
       }
     }
 
@@ -118,6 +122,8 @@ class _GameScreenState extends State<GameScreen> {
     List<Widget> list = [];
 
     for (int i = 0; i < brickList.length; i++) {
+      brickList[i][4] = Random().nextBool();
+      if (brickList[i][4]) {}
       final List<String> brick = brickColors[i];
       list.add(
         MyBrick(
@@ -128,7 +134,8 @@ class _GameScreenState extends State<GameScreen> {
           brickBroken: brickList[i][2],
           brickCracked: brickList[i][3],
           numberOfBricksPerRow: numOfBricksPerRow,
-          brick: brick, particleEffectAsset: '',
+          brick: brick,
+          hasPowerUp: brickList[i][4],
         ),
       );
     }
@@ -326,6 +333,23 @@ class _GameScreenState extends State<GameScreen> {
             brokenBrickCounter++;
             scores = scores + brokenBrickCounter;
           } else {
+            // if (brickList[i][4]) {
+
+            //   double powerUpY = brickList[i][1];
+            //   Timer.periodic(const Duration(milliseconds: 30), (timer) {
+            //     // Update power-up's Y position to make it fall
+            //     powerUpY +=
+            //         0.0022; // Adjust the fall speed according to your game's pace.
+            //     if (powerUpY > 0.94) {
+            //       // The power-up reached the bottom, remove it from the game.
+            //       timer.cancel();
+            //       // Handle removal or reset of the power-up.
+            //     }
+            //     setState(() {
+            //       // Update the state to reflect the new position.
+            //     });
+            //   });
+            // }
             brickList[i][2] = true;
             brokenBrickCounter++;
             scores = scores + brokenBrickCounter;
@@ -451,6 +475,7 @@ class _GameScreenState extends State<GameScreen> {
     if (getScore < scores) {
       await prefs.setInt('high', scores);
     }
+    await gameService.submitScore(scores);
   }
 
   bool areAllBricksBroken() {
@@ -475,7 +500,7 @@ class _GameScreenState extends State<GameScreen> {
         return true;
       }
     }
-
+    saveScores();
     return false;
   }
 
@@ -945,6 +970,7 @@ class _GameScreenState extends State<GameScreen> {
                         onHorizontalDragUpdate: onHorizontalDragUpdate,
                         playerX: playerX,
                         playerWidth: playerWidth,
+                        hasPowerUp: playerHasPowerUp,
                       ),
 
                       //BRICKS

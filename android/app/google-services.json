@@ -1,26 +1,67 @@
 {
   "project_info": {
-    "project_number": "85478361501",
-    "project_id": "breakout-revival",
-    "storage_bucket": "breakout-revival.appspot.com"
+    "project_number": "471764593183",
+    "project_id": "breakout-revival-402311",
+    "storage_bucket": "breakout-revival-402311.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:85478361501:android:385935c02605c06f148774",
+        "mobilesdk_app_id": "1:471764593183:android:ac2b8be771e836d4c0c32a",
         "android_client_info": {
-          "package_name": "com.example.breakout_revival"
+          "package_name": "com.mavipop.breakout_revival"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "471764593183-2dtbt71jscuoc172jp9nb2dio8vv071n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mavipop.breakout_revival",
+            "certificate_hash": "9c22c1a3e06c99faeb962758c870681ee919afcf"
+          }
+        },
+        {
+          "client_id": "471764593183-4isu04o7v5uskmf8l73l5a3bh9h0roia.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mavipop.breakout_revival",
+            "certificate_hash": "8a1c30fbc07e058f6de25e1c1f1178bf95faa994"
+          }
+        },
+        {
+          "client_id": "471764593183-klibc49toudqt69681h4smq6f2c36gur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mavipop.breakout_revival",
+            "certificate_hash": "0fba5f917f8f3fcd5f8bb0b6c15651497b406662"
+          }
+        },
+        {
+          "client_id": "471764593183-m8ht1nni3f1tlgu8t0t7lcvknnq3al8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCvXSuswE9ixrZD1c4ahGi0gZsHWv5RRq8"
+          "current_key": "AIzaSyAxEYvndc1jSq3_UPyrmgruu_Tl5MQ6NeA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471764593183-fue87d8q5r0rb0sa2me69cd5uvgmcvq2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "471764593183-i2736ngsube0831dihhn83p6tp12je8p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.breakoutRevival"
+              }
+            }
+          ]
         }
       }
     }
